@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فزعة - التسجيل</title>
+    <link rel="stylesheet" href="style-order.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div class="page order-page">
+            <!-- Header -->
+            <header class="header">
+                <div class="header__media" aria-hidden="true">
+                    <img class="header__background" src="assets/images/header.jpg" alt="">
+                </div>
+                <div class="header__inner">
+                    <div class="header__utility">
+                        <a class="header__utility-link" href="#">
+                            <i class="fa-solid fa-language"></i> English
+                        </a>
+                        <a class="brand" href="index.html">
+                            <img class="brand__image" src="assets/images/logo.png" alt="فزعة">
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Order Form -->
+            <main class="order">
+                <section class="order__hero">
+                    <h1 class="order__title">كن عضواً</h1>
+                    
+                    <!-- Steps Indicator -->
+                    <div class="order__steps" aria-label="خطوات التسجيل">
+                        <div class="order__step" data-step="1">
+                            <span class="order__step-dot order__step-dot--active">1</span>
+                            <span class="order__step-label">معلومات شخصية</span>
+                        </div>
+                        <div class="order__step-line order__step-line--active"></div>
+                        <div class="order__step" data-step="2">
+                            <span class="order__step-dot">2</span>
+                            <span class="order__step-label">معلومات العنوان</span>
+                        </div>
+                        <div class="order__step-line"></div>
+                        <div class="order__step" data-step="3">
+                            <span class="order__step-dot">3</span>
+                            <span class="order__step-label">اشترك</span>
+                        </div>
+                    </div>
+
+                    <form class="order__panel" id="order-form">
+                        <p class="order__copy">يرجى إدخال معلوماتك بشكل صحيح</p>
+
+                        <!-- Step 1: Personal Info -->
+                        <div class="order__step-panel order__step-panel--active" data-step-panel="1">
+                            <div class="order__field">
+                                <label class="order__label" for="full-name">الاسم</label>
+                                <input id="full-name" name="fullName" class="order__input" type="text" autocomplete="name" placeholder="يرجى إدخال اسمك">
+                                <span class="order__error" data-error="full-name"></span>
+                            </div>
+                            <div class="order__field">
+                                <label class="order__label" for="phone-number">رقم الهاتف</label>
+                                <div class="order__phone-wrap">
+                                    <span class="order__phone-prefix">+971</span>
+                                    <input id="phone-number" name="phoneNumber" class="order__input order__input--phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="يرجى إدخال رقم هاتفك">
+                                </div>
+                                <span class="order__error" data-error="phone-number"></span>
+                            </div>
+                            <div class="order__field">
+                                <label class="order__label" for="national-id">رقم الهوية</label>
+                                <input id="national-id" name="nationalId" class="order__input" type="text" inputmode="numeric" placeholder="يرجى إدخال رقم الهوية">
+                                <span class="order__error" data-error="national-id"></span>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Address Info -->
+                        <div class="order__step-panel" data-step-panel="2">
+                            <div class="order__field">
+                                <label class="order__label" for="city">المنطقة</label>
+                                <select id="city" name="city" class="order__input order__select">
+                                    <option value="">اختر المنطقة</option>
+                                    <option value="dubai">دبي</option>
+                                    <option value="abu-dhabi">أبوظبي</option>
+                                    <option value="sharjah">الشارقة</option>
+                                    <option value="ajman">عجمان</option>
+                                    <option value="fujairah">الفجيرة</option>
+                                    <option value="ras-al-khaimah">رأس الخيمة</option>
+                                    <option value="umm-al-quwain">أم القيوين</option>
+                                </select>
+                                <span class="order__error" data-error="city"></span>
+                            </div>
+                            <div class="order__field">
+                                <label class="order__label" for="street-1">عنوان الشارع</label>
+                                <input id="street-1" name="street1" class="order__input" type="text" autocomplete="address-line1" placeholder="يرجى إدخال عنوان الشارع">
+                                <span class="order__error" data-error="street-1"></span>
+                            </div>
+                            <div class="order__field">
+                                <label class="order__label" for="street-2">الحي</label>
+                                <input id="street-2" name="street2" class="order__input" type="text" autocomplete="address-line2" placeholder="يرجى إدخال الحي">
+                                <span class="order__error" data-error="street-2"></span>
+                            </div>
+                            <div class="order__field">
+                                <label class="order__label" for="delivery-date">موعد الاستلام</label>
+                                <input id="delivery-date" name="deliveryDate" class="order__input" type="date" lang="ar">
+                                <span class="order__error" data-error="delivery-date"></span>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Summary & Payment -->
+                        <div class="order__step-panel order__step-panel--summary" data-step-panel="3">
+                            <h2 class="order__summary-title">الفاتورة وطريقة الدفع</h2>
+                            
+                            <section class="order__summary-card">
+                                <h3 class="order__summary-heading">ملخص الطلب</h3>
+                                <div class="order__summary-list" id="order-summary">
+                                    <!-- Dynamic content -->
+                                </div>
+                            </section>
+                            
+                            <section class="order__summary-total">
+                                <span class="order__summary-total-label">المبلغ الإجمالي</span>
+                                <span class="order__summary-total-value" id="order-total">0 درهم</span>
+                            </section>
+                            
+                            <section class="order__payment">
+                                <h3 class="order__payment-title">اختر طريقة الدفع</h3>
+                                
+                                <label class="order__payment-option">
+                                    <input type="radio" name="paymentMethod" value="card" checked>
+                                    <span class="order__payment-content">
+                                        <span class="order__payment-text">فيزا / ماستركارد</span>
+                                        <span class="order__payment-icons">
+                                            <i class="fa-brands fa-cc-visa order__payment-icon order__payment-icon--visa"></i>
+                                            <img class="order__payment-icon order__payment-icon--mastercard" src="assets/images/Mastercard.svg" alt="">
+                                        </span>
+                                    </span>
+                                </label>
+                                
+                                <label class="order__payment-option order__payment-option--disabled">
+                                    <input type="radio" name="paymentMethod" value="applepay" disabled>
+                                    <span class="order__payment-content">
+                                        <span class="order__payment-text">أبل باي</span>
+                                        <span class="order__payment-icons">
+                                            <i class="fa-brands fa-cc-apple-pay order__payment-icon order__payment-icon--applepay"></i>
+                                        </span>
+                                    </span>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="order__actions">
+                            <button class="order__submit order__submit--back" type="button" id="btn-back" hidden>رجوع</button>
+                            <button class="order__submit" type="button" id="btn-next">المتابعة</button>
+                        </div>
+                    </form>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer__inner">
+                    <div class="footer__brand">
+                        <strong>فزعة</strong>
+                        <p class="footer__copyright">© 2026 فزعة. جميع الحقوق محفوظة.</p>
+                    </div>
+                    <div class="footer__links">
+                        <a href="#">سياسة الخصوصية</a>
+                        <a href="#">شروط الخدمة</a>
+                        <a href="#">الدعم</a>
+                        <a href="#">الأسئلة الشائعة</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="script-order.js"></script>
+</body>
+</html>
