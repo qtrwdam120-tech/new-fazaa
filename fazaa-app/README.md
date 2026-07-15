@@ -2,73 +2,83 @@
 
 تطبيق ويب متكامل مع Front-end و Back-end لإدارة طلبات عضوية فزعة.
 
-## 🚀 المميزات
+## الموقع
+https://new-fazaa.onrender.com
+
+---
+
+## المميزات
 
 ### Front-end
-- ✅ صفحة رئيسية مع عرض الباقات
-- ✅ صفحة الطلب (نموذج متعدد الخطوات)
-- ✅ صفحة الدفع (إدخال بيانات البطاقة)
-- ✅ صفحة التحقق (OTP)
-- ✅ صفحة النجاح
+- صفحة رئيسية مع عرض الباقات (4 باقات)
+- صفحة الطلب (نموذج متعدد الخطوات)
+- صفحة الدفع (إدخال بيانات البطاقة)
+- صفحة التحقق (OTP)
+- صفحة النجاح
+- دعم اللغتين (عربي / إنجليزي)
 
 ### Back-end (Node.js + Express)
-- ✅ إدارة الجلسات (Sessions)
-- ✅ التحقق من ترتيب الخطوات
-- ✅ حماية المسارات
-- ✅ API للتحكم في الطلبات
+- إدارة الجلسات (Sessions)
+- التحقق من ترتيب الخطوات
+- حماية المسارات
+- API للتحكم في الطلبات
 
-## 📁 هيكل المشروع
+---
+
+## هيكل المشروع
 
 ```
 fazaa-app/
-├── package.json
-├── render.yaml          # إعدادات النشر على Render
-├── README.md
+├── package.json           # إعدادات المشروع
+├── render.yaml           # إعدادات Render للنشر
+├── README.md             # هذا الملف
 └── server/
-    ├── index.js              # الخادم الرئيسي
+    ├── index.js          # الخادم الرئيسي
     ├── routes/
-    │   └── api.js            # مسارات API
-    └── public/
-        ├── index.html        # الصفحة الرئيسية
+    │   └── api.js       # API Routes
+    ├── pages/            # الصفحات (مجلد محمي)
+    │   ├── order.html
+    │   ├── payment.html
+    │   ├── verification.html
+    │   └── success.html
+    └── public/           # الملفات العامة
+        ├── index.html    # الصفحة الرئيسية
         ├── js/
-        │   ├── main.js      # JavaScript الرئيسي
-        │   └── order.js     # JavaScript لصفحة الطلب
+        │   ├── main.js   # JavaScript الرئيسي
+        │   ├── order.js # JavaScript لصفحة الطلب
+        │   └── i18n.js # نظام الترجمة
         ├── css/
-        │   ├── styles.css   # تنسيقات عامة
-        │   └── order.css    # تنسيقات صفحة الطلب
-        ├── images/          # الصور
-        └── pages/           # الصفحات (مجلد مخفي)
-            ├── order.html
-            ├── payment.html
-            ├── verification.html
-            └── success.html
+        │   ├── styles.css
+        │   └── order.css
+        └── images/       # الصور والأيقونات
 ```
 
-## 🌐 النشر على Render
+---
 
-### الطريقة الأولى: Blueprint (الأسهل)
+## النشر على Render
 
-1. اذهب إلى [dashboard.render.com](https://dashboard.render.com)
-2. اضغط على **"New +"** → **"Blueprint"**
+### الطريقة السهلة (Blueprint):
+
+1. اذهب إلى dashboard.render.com
+2. اضغط New + → Blueprint
 3. اربط مستودع GitHub
-4. اختر ملف `render.yaml` من المجلد `fazaa-app`
-5. اضغط **"Apply"** وانتظر البناء
+4. اختر ملف render.yaml من fazaa-app/
+5. اضغط Apply
 
-### الطريقة الثانية: يدوية
+### الطريقة اليدوية:
 
-1. اذهب إلى [dashboard.render.com](https://dashboard.render.com)
-2. اضغط على **"New +"** → **"Web Service"**
-3. اربط مستودع GitHub
-4. الإعدادات:
-   - **Root Directory**: `fazaa-app`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-5. أضف متغيرات البيئة:
-   - `NODE_ENV` = `production`
-   - `SESSION_SECRET` = أي نص سري
-6. اضغط **"Create Web Service"**
+1. New + → Web Service
+2. الإعدادات:
+   - Root Directory: fazaa-app
+   - Build Command: npm install
+   - Start Command: npm start
+3. أضف Environment Variables:
+   - NODE_ENV = production
+   - SESSION_SECRET = أي نص سري
 
-## 🏠 التشغيل محلياً
+---
+
+## التشغيل محلياً
 
 ```bash
 # تثبيت الحزم
@@ -78,38 +88,41 @@ npm install
 # تشغيل الخادم
 npm start
 
-# فتح المتصفح على
+# فتح المتصفح
 http://localhost:10000
 ```
 
-## 🔐 تدفق الجلسات
+---
 
-1. **الخطوة 1**: المستخدم يختار الباقة ويضغط "أطلب الآن"
-2. **الخطوة 2**: الخادم ينشئ معرف فريد (UUID) ويبدأ جلسة
-3. **الخطوة 3**: المستخدم يكمل البيانات خطوة بخطوة
-4. **الخطوة 4**: كل خطوة يتم التحقق منها في الخادم
-5. **الخطوة 5**: إذا لم يكن لديه جلسة صحيحة → إعادة للرئيسية
+## تدفق الجلسات
 
-## 📡 API Endpoints
+الصفحة الرئيسية → [أطلب الآن] → /order → /payment → /verification → /success
+
+| الصفحة | التحقق |
+|--------|---------|
+| الرئيسية | اختيار الباقة |
+| /order | وجود userId |
+| /payment | orderCompleted = true |
+| /verification | paymentCompleted = true |
+| /success | verified = true |
+
+---
+
+## API Endpoints
 
 | Method | Endpoint | الوصف |
 |--------|----------|-------|
-| GET | `/api/health` | فحص صحة الخادم |
-| POST | `/api/start-order` | بدء طلب جديد وإنشاء جلسة |
-| GET | `/api/check-session` | التحقق من حالة الجلسة |
-| POST | `/api/submit-order` | حفظ بيانات الطلب |
-| POST | `/api/submit-payment` | تأكيد الدفع |
-| POST | `/api/verify-otp` | التحقق من رمز OTP |
-| POST | `/api/reset-session` | إعادة تعيين الجلسة |
+| GET | /api/health | فحص صحة الخادم |
+| POST | /api/start-order | بدء طلب جديد |
+| GET | /api/check-session | التحقق من الجلسة |
+| POST | /api/submit-order | حفظ بيانات الطلب |
+| POST | /api/submit-payment | تأكيد الدفع |
+| POST | /api/verify-otp | التحقق من OTP |
+| POST | /api/reset-session | إنهاء الجلسة |
 
-## 🔒 حماية المسارات
+---
 
-- `/order` → يتطلب بدء الطلب أولاً
-- `/payment` → يتطلب إكمال بيانات الطلب
-- `/verification` → يتطلب تأكيد الدفع
-- `/success` → يتطلب التحقق من OTP
-
-## 💳 الباقات والأسعار
+## الباقات والأسعار
 
 | الباقة | السعر |
 |--------|-------|
@@ -118,12 +131,21 @@ http://localhost:10000
 | الفضية | 99 درهم/سنة |
 | خصومات فزعة | 49 درهم/سنة |
 
-## 📝 ملاحظات مهمة
+---
 
-- الخادم يعمل على البورت `10000` (افتراضي لـ Render)
-- الجلسات تنتهي بعد 30 دقيقة من عدم النشاط
-- في الإنتاج، يتم توليد `SESSION_SECRET` تلقائياً
+## اللغات المدعومة
+
+- العربية (افتراضي)
+- الإنجليزية
 
 ---
 
-تم إنشاؤه بواسطة OpenHands 🤖
+## ملاحظات
+
+- الخادم يعمل على بورت 10000
+- الجلسات تنتهي بعد ساعة من عدم النشاط
+- في الإنتاج، يتم توليد SESSION_SECRET تلقائياً
+
+---
+
+تم إنشاؤه بواسطة OpenHands
