@@ -12,6 +12,7 @@ const translations = {
         pageTitlePayment: "الدفع",
         pageTitleVerification: "التحقق",
         pageTitleSuccess: "تم بنجاح",
+        pageTitleHome: "فزعة - Fazaa",
         
         // Order Page
         stepPersonal: "معلومات شخصية",
@@ -21,6 +22,7 @@ const translations = {
         fullName: "الاسم الكامل",
         fullNamePlaceholder: "يرجى إدخال اسمك",
         phoneNumber: "رقم الهاتف",
+        phonePrefix: "971+",
         phonePlaceholder: "5xxxxxxxx",
         nationalId: "رقم الهوية",
         nationalIdPlaceholder: "15 رقم",
@@ -30,6 +32,9 @@ const translations = {
         abuDhabi: "أبوظبي",
         sharjah: "الشارقة",
         ajman: "عجمان",
+        fujairah: "الفجيرة",
+        rasAlKhaimah: "رأس الخيمة",
+        ummAlQuwain: "أم القيوين",
         street1: "عنوان الشارع",
         street1Placeholder: "يرجى إدخال عنوان الشارع",
         street2: "الحي (اختياري)",
@@ -42,12 +47,18 @@ const translations = {
         // Summary
         invoiceTitle: "الفاتورة وطريقة الدفع",
         orderSummary: "ملخص الطلب",
+        name: "الاسم",
+        phone: "رقم الهاتف",
+        region: "المنطقة",
+        address: "العنوان",
+        package: "الباقة",
         registrationFee: "رسوم التسجيل",
         free: "مجاناً",
         duration: "المدة",
         oneYear: "سنة واحدة",
         totalAmount: "المبلغ الإجمالي",
         aed: "درهم",
+        perYear: "/ سنة",
         
         // Payment Page
         cardHolder: "اسم حامل البطاقة",
@@ -56,24 +67,28 @@ const translations = {
         cardNumberPlaceholder: "xxxx xxxx xxxx xxxx",
         expiryDate: "تاريخ الانتهاء",
         expiryPlaceholder: "MM/YY",
-        cvv: "CVV",
+        cvv: "رمز الأمان (CVV)",
         cvvPlaceholder: "***",
         secureNotice: "معلوماتك محمية ومشفرة",
         completePayment: "إتمام الدفع",
         cardDeclined: "تم رفض البطاقة",
         useAnotherCard: "يرجى استخدام بطاقة أخرى",
+        invalidCard: "يرجى إدخال رقم بطاقة صحيح",
+        connectionError: "حدث خطأ في الاتصال",
         
         // Verification Page
         secureAuth: "المصادقة الثنائية الآمنة",
         authDesc: "ستتلقى رمزاً سرياً لمرة واحدة (OTP) لتأكيد عملية الدفع عبر رسالة نصية أو تطبيق البنك.",
         enterOtp: "يرجى إدخال رمز التحقق (OTP):",
         otpSent: "الرمز مرسل الآن إلى رقم الهاتف المرتبط بالبطاقة",
+        last4: "••••",
         enterCode: "أدخل الرمز هنا:",
+        codePlaceholder: "• • • • • •",
         confirm: "تأكيد",
         timerText: "ستنتهي صلاحية هذه الصفحة بعد",
         seconds: "ثانية",
         needHelp: "هل تحتاج للمساعدة؟",
-        verifying: "جاري التحقق من المعلومات...",
+        verifying: "جاري التحقق من المعلومات، يرجى الانتظار...",
         contactUs: "تواصل معنا",
         
         // Success Page
@@ -91,6 +106,19 @@ const translations = {
         silver: "الفضية",
         fazaa: "خصومات فزعة",
         
+        // Tier Descriptions
+        platinumDesc: "أوسع مزايا وعروض حصرية",
+        goldDesc: "عروض وخصومات مميزة",
+        silverDesc: "خصومات وخدمات أساسية",
+        fazaaDiscountDesc: "خصومات مختارة يومياً",
+        
+        // Prices
+        pricePlatinum: "299",
+        priceGold: "199",
+        priceSilver: "99",
+        priceFazaa: "49",
+        currency: "درهم",
+        
         // Errors
         requiredField: "هذا الحقل مطلوب",
         phoneError: "رقم الهاتف يجب أن يبدأ بـ 5 ويتكون من 9 أرقام",
@@ -104,7 +132,7 @@ const translations = {
         faq: "الأسئلة الشائعة",
         rights: "جميع الحقوق محفوظة.",
         
-        // Modals
+        // Modals & Alerts
         alertTitle: "تنبيه",
         errorSelectPackage: "يرجى اختيار الباقة أولاً ثم إكمال طلبك",
         completeOrderFirst: "يرجى إكمال بيانات الطلب أولاً",
@@ -114,12 +142,9 @@ const translations = {
         // Features
         membershipBenefits: "مزايا العضوية",
         mostPopular: "الأكثر طلباً",
-        platinumDesc: "أوسع مزايا وعروض حصرية",
-        goldDesc: "عروض وخصومات مميزة",
-        silverDesc: "خصومات وخدمات أساسية",
-        fazaaDiscountDesc: "خصومات مختارة يومياً",
         orderNow: "أطلب الآن",
         showMore: "عرض المزيد",
+        showLess: "عرض أقل",
         feat1: "عروض البلاتينية الحصرية",
         feat2: "العروض والخصومات",
         feat3: "فنادق وباقات للسفر",
@@ -130,9 +155,7 @@ const translations = {
         feat8: "إيجار السيارات طويل الأمد",
         feat9: "فزعة للسيارات المستعملة",
         feat10: "التعويض عن الحوادث الشخصية",
-        price: "سعر",
-        year: "سنة",
-        yearUnit: "سنة"
+        year: "سنة"
     },
     en: {
         // Header
@@ -144,6 +167,7 @@ const translations = {
         pageTitlePayment: "Payment",
         pageTitleVerification: "Verification",
         pageTitleSuccess: "Success",
+        pageTitleHome: "Fazaa - Membership",
         
         // Order Page
         stepPersonal: "Personal Info",
@@ -153,6 +177,7 @@ const translations = {
         fullName: "Full Name",
         fullNamePlaceholder: "Please enter your name",
         phoneNumber: "Phone Number",
+        phonePrefix: "+971",
         phonePlaceholder: "5xxxxxxxx",
         nationalId: "National ID",
         nationalIdPlaceholder: "15 digits",
@@ -162,6 +187,9 @@ const translations = {
         abuDhabi: "Abu Dhabi",
         sharjah: "Sharjah",
         ajman: "Ajman",
+        fujairah: "Fujairah",
+        rasAlKhaimah: "Ras Al Khaimah",
+        ummAlQuwain: "Umm Al Quwain",
         street1: "Street Address",
         street1Placeholder: "Please enter street address",
         street2: "Neighborhood (Optional)",
@@ -174,12 +202,18 @@ const translations = {
         // Summary
         invoiceTitle: "Invoice & Payment Method",
         orderSummary: "Order Summary",
+        name: "Name",
+        phone: "Phone Number",
+        region: "Region",
+        address: "Address",
+        package: "Package",
         registrationFee: "Registration Fee",
         free: "Free",
         duration: "Duration",
         oneYear: "One Year",
         totalAmount: "Total Amount",
         aed: "AED",
+        perYear: "/ year",
         
         // Payment Page
         cardHolder: "Cardholder Name",
@@ -188,19 +222,23 @@ const translations = {
         cardNumberPlaceholder: "xxxx xxxx xxxx xxxx",
         expiryDate: "Expiry Date",
         expiryPlaceholder: "MM/YY",
-        cvv: "CVV",
+        cvv: "Security Code (CVV)",
         cvvPlaceholder: "***",
         secureNotice: "Your information is protected and encrypted",
         completePayment: "Complete Payment",
         cardDeclined: "Card Declined",
         useAnotherCard: "Please use another card",
+        invalidCard: "Please enter a valid card number",
+        connectionError: "Connection error occurred",
         
         // Verification Page
         secureAuth: "Secure Two-Factor Authentication",
         authDesc: "You will receive a one-time code (OTP) to confirm the payment via SMS or bank app.",
         enterOtp: "Please enter the verification code (OTP):",
         otpSent: "Code sent to the phone number linked to the card",
+        last4: "****",
         enterCode: "Enter code here:",
+        codePlaceholder: "• • • • • •",
         confirm: "Confirm",
         timerText: "This page will expire after",
         seconds: "seconds",
@@ -223,6 +261,19 @@ const translations = {
         silver: "Silver",
         fazaa: "Fazaa Discounts",
         
+        // Tier Descriptions
+        platinumDesc: "Wider benefits and exclusive offers",
+        goldDesc: "Special offers and discounts",
+        silverDesc: "Discounts and basic services",
+        fazaaDiscountDesc: "Daily selected discounts",
+        
+        // Prices
+        pricePlatinum: "299",
+        priceGold: "199",
+        priceSilver: "99",
+        priceFazaa: "49",
+        currency: "AED",
+        
         // Errors
         requiredField: "This field is required",
         phoneError: "Phone number must start with 5 and be 9 digits",
@@ -236,7 +287,7 @@ const translations = {
         faq: "FAQ",
         rights: "All rights reserved.",
         
-        // Modals
+        // Modals & Alerts
         alertTitle: "Alert",
         errorSelectPackage: "Please select a package first to complete your order",
         completeOrderFirst: "Please complete your order details first",
@@ -246,12 +297,9 @@ const translations = {
         // Features
         membershipBenefits: "Membership Benefits",
         mostPopular: "Most Popular",
-        platinumDesc: "Wider benefits and exclusive offers",
-        goldDesc: "Special offers and discounts",
-        silverDesc: "Discounts and basic services",
-        fazaaDiscountDesc: "Daily selected discounts",
         orderNow: "Order Now",
         showMore: "Show More",
+        showLess: "Show Less",
         feat1: "Exclusive Platinum Offers",
         feat2: "Offers and Discounts",
         feat3: "Hotels and Travel Packages",
@@ -262,9 +310,7 @@ const translations = {
         feat8: "Long-term Car Rental",
         feat9: "Used Cars by Fazaa",
         feat10: "Personal Accident Compensation",
-        price: "Price",
-        year: "Year",
-        yearUnit: "Year"
+        year: "year"
     }
 };
 
@@ -302,9 +348,17 @@ function applyLanguage(lang) {
         }
     });
     
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+            element.placeholder = translations[lang][key];
+        }
+    });
+    
     // Update page title
-    const titleEl = document.querySelector('[data-i18n="pageTitle"]');
-    if (titleEl) {
+    const titleKey = document.querySelector('[data-i18n="pageTitle"]');
+    if (titleKey) {
         document.title = translations[lang].pageTitle;
     }
     
