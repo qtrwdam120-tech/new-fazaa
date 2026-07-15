@@ -5,42 +5,13 @@ const { v4: uuidv4 } = require('uuid');
 // In-memory storage (in production, use a database)
 const sessions = new Map();
 
-// Helper function to validate step progression
-function validateStep(req, requiredStep) {
-    const currentStep = req.session.currentStep || 0;
-    
-    if (requiredStep === 1 && !req.session.userId) {
-        return { valid: true };
-    }
-    
-    if (requiredStep === 2 && req.session.orderStarted) {
-        return { valid: true };
-    }
-    
-    if (requiredStep === 3 && req.session.orderCompleted) {
-        return { valid: true };
-    }
-    
-    if (requiredStep === 4 && req.session.paymentCompleted) {
-        return { valid: true };
-    }
-    
-    return { 
-        valid: false, 
-        message: 'يرجى إكمال الخطوات السابقة أولاً',
-        redirect: '/' 
-    };
-}
-
 // ============ API ROUTES ============
 
 // 1. Start new order / Get session
 router.post('/start-order', (req, res) => {
     try {
-        // Generate unique user ID
         const userId = uuidv4();
         
-        // Initialize session
         req.session.userId = userId;
         req.session.currentStep = 1;
         req.session.orderStarted = false;
@@ -51,7 +22,6 @@ router.post('/start-order', (req, res) => {
         req.session.orderData = null;
         req.session.createdAt = new Date().toISOString();
         
-        // Store session data
         sessions.set(userId, {
             userId,
             currentStep: 1,
@@ -61,7 +31,7 @@ router.post('/start-order', (req, res) => {
             createdAt: new Date()
         });
         
-        console.log(`📝 طلب جديد started: ${userId}`);
+        console.log('New order started:', userId);
         
         res.json({
             success: true,
@@ -88,8 +58,6 @@ router.get('/check-session', (req, res) => {
         });
     }
     
-    const sessionData = sessions.get(userId);
-    
     res.json({
         hasSession: true,
         userId,
@@ -97,20 +65,20 @@ router.get('/check-session', (req, res) => {
         orderStarted: req.session.orderStarted || false,
         orderCompleted: req.session.orderCompleted || false,
         paymentCompleted: req.session.paymentCompleted || false,
-        verified: req.session.verified || false,
-        nextPage: getNextPage(req.session)
+        verified: req.session.verified || false
     });
 });
 
-// 3. Submit order form (Step 1)
+// 3. Submit order form
 router.post('/submit-order', (req, res) => {
     try {
-        const validation = validateStep(req, 2);
-        if (!validation.valid) {
+        // التحقق: فقط يحتاج userId (بدأ الطلب)
+        if (!req.session.userId) {
+            console.log('Submit order failed: No userId');
             return res.status(400).json({
                 success: false,
-                error: validation.message,
-                redirect: validation.redirect
+                error: 'يرجى بدء الطلب أولاً',
+                redirect: '/'
             });
         }
         
@@ -165,7 +133,7 @@ router.post('/submit-order', (req, res) => {
             sessions.get(req.session.userId).status = 'order_completed';
         }
         
-        console.log(`✅ Order completed for: ${req.session.userId}`);
+        console.log('Order completed for:', req.session.userId);
         
         res.json({
             success: true,
@@ -182,21 +150,21 @@ router.post('/submit-order', (req, res) => {
     }
 });
 
-// 4. Submit payment (Step 2)
+// 4. Submit payment
 router.post('/submit-payment', (req, res) => {
     try {
-        const validation = validateStep(req, 3);
-        if (!validation.valid) {
+        // التحقق: يحتاج orderCompleted
+        if (!req.session.userId || !req.session.orderCompleted) {
+            console.log('Submit payment failed: No orderCompleted');
             return res.status(400).json({
                 success: false,
-                error: validation.message,
-                redirect: validation.redirect
+                error: 'يرجى إكمال بيانات الطلب أولاً',
+                redirect: '/?error=complete_order_first'
             });
         }
         
         const { cardLast4, cardType } = req.body;
         
-        // Save payment data (without sensitive info)
         req.session.paymentData = {
             cardLast4: cardLast4 || '****',
             cardType: cardType || 'unknown',
@@ -206,14 +174,13 @@ router.post('/submit-payment', (req, res) => {
         req.session.currentStep = 3;
         req.session.paymentCompleted = true;
         
-        // Update session storage
         if (sessions.has(req.session.userId)) {
             sessions.get(req.session.userId).paymentData = req.session.paymentData;
             sessions.get(req.session.userId).currentStep = 3;
             sessions.get(req.session.userId).status = 'payment_completed';
         }
         
-        console.log(`💳 Payment completed for: ${req.session.userId}`);
+        console.log('Payment completed for:', req.session.userId);
         
         res.json({
             success: true,
@@ -230,15 +197,16 @@ router.post('/submit-payment', (req, res) => {
     }
 });
 
-// 5. Verify OTP (Step 3)
+// 5. Verify OTP
 router.post('/verify-otp', (req, res) => {
     try {
-        const validation = validateStep(req, 4);
-        if (!validation.valid) {
+        // التحقق: يحتاج paymentCompleted
+        if (!req.session.userId || !req.session.paymentCompleted) {
+            console.log('Verify OTP failed: No paymentCompleted');
             return res.status(400).json({
                 success: false,
-                error: validation.message,
-                redirect: validation.redirect
+                error: 'يرجى إتمام الدفع أولاً',
+                redirect: '/?error=complete_payment_first'
             });
         }
         
@@ -256,7 +224,6 @@ router.post('/verify-otp', (req, res) => {
         req.session.currentStep = 4;
         req.session.verified = true;
         
-        // Update session storage
         if (sessions.has(req.session.userId)) {
             sessions.get(req.session.userId).currentStep = 4;
             sessions.get(req.session.userId).verified = true;
@@ -264,7 +231,7 @@ router.post('/verify-otp', (req, res) => {
             sessions.get(req.session.userId).completedAt = new Date();
         }
         
-        console.log(`🎉 Verification completed for: ${req.session.userId}`);
+        console.log('Verification completed for:', req.session.userId);
         
         res.json({
             success: true,
@@ -319,16 +286,6 @@ router.post('/reset-session', (req, res) => {
         });
     });
 });
-
-// Helper function to get next page
-function getNextPage(session) {
-    if (!session.userId) return '/';
-    if (!session.orderStarted) return '/order';
-    if (!session.orderCompleted) return '/order';
-    if (!session.paymentCompleted) return '/payment';
-    if (!session.verified) return '/verification';
-    return '/success';
-}
 
 // Helper function to get price by tier
 function getPrice(tier) {
