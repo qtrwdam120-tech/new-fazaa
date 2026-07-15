@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فزعة - التسجيل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/order.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__inner">
+            <a class="brand" href="/">
+                <img src="/images/logo.png" alt="فزعة">
+            </a>
+        </div>
+    </header>
+
+    <!-- Order Form -->
+    <main class="order">
+        <section class="order__hero">
+            <h1 class="order__title">كن عضواً</h1>
+            
+            <!-- Steps Indicator -->
+            <div class="order__steps">
+                <div class="order__step" data-step="1">
+                    <span class="order__step-dot order__step-dot--active">1</span>
+                    <span class="order__step-label">معلومات شخصية</span>
+                </div>
+                <div class="order__step-line"></div>
+                <div class="order__step" data-step="2">
+                    <span class="order__step-dot">2</span>
+                    <span class="order__step-label">معلومات العنوان</span>
+                </div>
+                <div class="order__step-line"></div>
+                <div class="order__step" data-step="3">
+                    <span class="order__step-dot">3</span>
+                    <span class="order__step-label">اشترك</span>
+                </div>
+            </div>
+
+            <!-- Error Alert -->
+            <div class="alert alert--error" id="errorAlert" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <form class="order__panel" id="orderForm">
+                <p class="order__copy">يرجى إدخال معلوماتك بشكل صحيح</p>
+
+                <!-- Step 1: Personal Info -->
+                <div class="order__step-panel order__step-panel--active" data-step-panel="1">
+                    <div class="order__field">
+                        <label class="order__label" for="full-name">الاسم الكامل</label>
+                        <input id="full-name" name="fullName" class="order__input" type="text" placeholder="يرجى إدخال اسمك">
+                        <span class="order__error" data-error="full-name"></span>
+                    </div>
+                    <div class="order__field">
+                        <label class="order__label" for="phone-number">رقم الهاتف</label>
+                        <div class="order__phone-wrap">
+                            <span class="order__phone-prefix">+971</span>
+                            <input id="phone-number" name="phoneNumber" class="order__input order__input--phone" type="tel" placeholder="5xxxxxxxx">
+                        </div>
+                        <span class="order__error" data-error="phone-number"></span>
+                    </div>
+                    <div class="order__field">
+                        <label class="order__label" for="national-id">رقم الهوية</label>
+                        <input id="national-id" name="nationalId" class="order__input" type="text" placeholder="15 رقم">
+                        <span class="order__error" data-error="national-id"></span>
+                    </div>
+                </div>
+
+                <!-- Step 2: Address Info -->
+                <div class="order__step-panel" data-step-panel="2">
+                    <div class="order__field">
+                        <label class="order__label" for="city">المنطقة</label>
+                        <select id="city" name="city" class="order__input order__select">
+                            <option value="">اختر المنطقة</option>
+                            <option value="dubai">دبي</option>
+                            <option value="abu-dhabi">أبوظبي</option>
+                            <option value="sharjah">الشارقة</option>
+                            <option value="ajman">عجمان</option>
+                            <option value="fujairah">الفجيرة</option>
+                            <option value="ras-al-khaimah">رأس الخيمة</option>
+                            <option value="umm-al-quwain">أم القيوين</option>
+                        </select>
+                        <span class="order__error" data-error="city"></span>
+                    </div>
+                    <div class="order__field">
+                        <label class="order__label" for="street-1">عنوان الشارع</label>
+                        <input id="street-1" name="street1" class="order__input" type="text" placeholder="يرجى إدخال عنوان الشارع">
+                        <span class="order__error" data-error="street-1"></span>
+                    </div>
+                    <div class="order__field">
+                        <label class="order__label" for="street-2">الحي (اختياري)</label>
+                        <input id="street-2" name="street2" class="order__input" type="text" placeholder="يرجى إدخال الحي">
+                    </div>
+                    <div class="order__field">
+                        <label class="order__label" for="delivery-date">موعد الاستلام</label>
+                        <input id="delivery-date" name="deliveryDate" class="order__input" type="date">
+                        <span class="order__error" data-error="delivery-date"></span>
+                    </div>
+                </div>
+
+                <!-- Step 3: Summary -->
+                <div class="order__step-panel order__step-panel--summary" data-step-panel="3">
+                    <h2 class="order__summary-title">الفاتورة وطريقة الدفع</h2>
+                    
+                    <section class="order__summary-card">
+                        <h3 class="order__summary-heading">ملخص الطلب</h3>
+                        <div class="order__summary-list" id="orderSummary">
+                            <!-- Dynamic content -->
+                        </div>
+                    </section>
+                    
+                    <section class="order__summary-total">
+                        <span class="order__summary-total-label">المبلغ الإجمالي</span>
+                        <span class="order__summary-total-value" id="orderTotal">0 درهم</span>
+                    </section>
+                </div>
+
+                <div class="order__actions">
+                    <button class="order__submit order__submit--back" type="button" id="btnBack">
+                        <i class="fas fa-home"></i> الرئيسية
+                    </button>
+                    <button class="order__submit" type="button" id="btnNext">المتابعة</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <span>جاري حفظ البيانات...</span>
+        </div>
+    </div>
+
+    <script src="/js/order.js"></script>
+</body>
+</html>

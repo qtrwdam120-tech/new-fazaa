@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فزعة - Fazaa</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Error Modal -->
+    <div class="modal-overlay" id="errorModal">
+        <div class="modal">
+            <div class="modal-icon error">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="modal-title">تنبيه</h2>
+            <p class="modal-message" id="errorMessage">يرجى اختيار الباقة أولاً ثم إكمال طلبك</p>
+            <button class="btn btn-primary modal-btn" onclick="closeModal()">حسناً</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/images/logo.png" alt="فزعة">
+            </div>
+            <nav class="nav">
+                <a href="#" class="lang-toggle" id="langToggle">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <div class="slide active">
+                    <img src="/images/slider/slider_Fazaa-du-web-banner-arabic.png" alt="Banner 1">
+                </div>
+                <div class="slide">
+                    <img src="/images/slider/slider_Zero-dirhams-arabic.png" alt="Banner 2">
+                </div>
+            </div>
+            <div class="slider-nav">
+                <button class="slider-btn prev"><i class="fas fa-chevron-right"></i></button>
+                <button class="slider-btn next"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <div class="slider-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">مزايا العضوية</h2>
+            
+            <div class="cards-grid">
+                <!-- Platinum Card -->
+                <div class="card platinum" data-tier="platinum">
+                    <div class="card-badge">الأكثر طلباً</div>
+                    <div class="card-image">
+                        <img src="/images/products/Platinum.png" alt="البلاتينية">
+                    </div>
+                    <h3 class="card-title">البلاتينية</h3>
+                    <p class="card-desc">أوسع مزايا وعروض حصرية</p>
+                    <p class="card-price">299 درهم / سنة</p>
+                    <button class="btn btn-primary btn-order" onclick="startOrder('platinum')">أطلب الآن</button>
+                    <details class="card-details">
+                        <summary>عرض المزيد</summary>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> عروض البلاتينية الحصرية</li>
+                            <li><i class="fas fa-check"></i> العروض والخصومات</li>
+                            <li><i class="fas fa-check"></i> فنادق وباقات للسفر</li>
+                            <li><i class="fas fa-check"></i> متاجر فزعة</li>
+                            <li><i class="fas fa-check"></i> فزعة أماكن</li>
+                            <li><i class="fas fa-check"></i> خدمة إيجار السيارات</li>
+                            <li><i class="fas fa-check"></i> فزعة هيلث</li>
+                            <li><i class="fas fa-check"></i> إيجار السيارات طويل الأمد</li>
+                            <li><i class="fas fa-check"></i> فزعة للسيارات المستعملة</li>
+                            <li><i class="fas fa-check"></i> التعويض عن الحوادث الشخصية</li>
+                        </ul>
+                    </details>
+                </div>
+
+                <!-- Gold Card -->
+                <div class="card gold" data-tier="gold">
+                    <div class="card-image">
+                        <img src="/images/products/Gold.png" alt="الذهبية">
+                    </div>
+                    <h3 class="card-title">الذهبية</h3>
+                    <p class="card-desc">عروض وخصومات مميزة</p>
+                    <p class="card-price">199 درهم / سنة</p>
+                    <button class="btn btn-primary btn-order" onclick="startOrder('gold')">أطلب الآن</button>
+                    <details class="card-details">
+                        <summary>عرض المزيد</summary>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> العروض والخصومات</li>
+                            <li><i class="fas fa-check"></i> متاجر فزعة</li>
+                            <li><i class="fas fa-check"></i> فزعة أماكن</li>
+                            <li><i class="fas fa-check"></i> فنادق وباقات للسفر</li>
+                            <li><i class="fas fa-check"></i> خدمة إيجار السيارات</li>
+                            <li><i class="fas fa-check"></i> فزعة هيلث</li>
+                            <li><i class="fas fa-check"></i> إيجار السيارات طويل الأمد</li>
+                            <li><i class="fas fa-check"></i> التعويض عن الحوادث الشخصية</li>
+                        </ul>
+                    </details>
+                </div>
+
+                <!-- Silver Card -->
+                <div class="card silver" data-tier="silver">
+                    <div class="card-image">
+                        <img src="/images/products/Silver.png" alt="الفضية">
+                    </div>
+                    <h3 class="card-title">الفضية</h3>
+                    <p class="card-desc">خصومات وخدمات أساسية</p>
+                    <p class="card-price">99 درهم / سنة</p>
+                    <button class="btn btn-primary btn-order" onclick="startOrder('silver')">أطلب الآن</button>
+                    <details class="card-details">
+                        <summary>عرض المزيد</summary>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> فزعة أماكن</li>
+                            <li><i class="fas fa-check"></i> متاجر فزعة</li>
+                            <li><i class="fas fa-check"></i> فنادق وباقات للسفر</li>
+                            <li><i class="fas fa-check"></i> خدمة إيجار السيارات</li>
+                            <li><i class="fas fa-check"></i> فزعة هيلث</li>
+                            <li><i class="fas fa-check"></i> إيجار السيارات طويل الأمد</li>
+                        </ul>
+                    </details>
+                </div>
+
+                <!-- Fazaa Discounts Card -->
+                <div class="card fazaa-discount" data-tier="fazaa">
+                    <div class="card-image">
+                        <img src="/images/products/Discount.png" alt="خصومات فزعة">
+                    </div>
+                    <h3 class="card-title">خصومات فزعة</h3>
+                    <p class="card-desc">خصومات مختارة يومياً</p>
+                    <p class="card-price">49 درهم / سنة</p>
+                    <button class="btn btn-primary btn-order" onclick="startOrder('fazaa')">أطلب الآن</button>
+                    <details class="card-details">
+                        <summary>عرض المزيد</summary>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> فزعة هيلث</li>
+                            <li><i class="fas fa-check"></i> متاجر فزعة</li>
+                            <li><i class="fas fa-check"></i> فزعة أماكن</li>
+                            <li><i class="fas fa-check"></i> فنادق وباقات للسفر</li>
+                            <li><i class="fas fa-check"></i> خدمة إيجار السيارات</li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="brand-name">فزعة</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">سياسة الخصوصية</a>
+                <a href="#">شروط الخدمة</a>
+                <a href="#">الدعم</a>
+                <a href="#">الأسئلة الشائعة</a>
+            </div>
+            <div class="footer-copyright">
+                <p>© 2026 فزعة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
