@@ -27,43 +27,58 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString(), service: 'fazaa-app' });
+    res.json({ status: 'ok' });
 });
 
 app.use('/api', routes);
 
+// /order - فقط يحتاج userId (يبدأ بالتحقق من orderStarted في API)
 app.get('/order', (req, res) => {
-    console.log('/order - SessionID:', req.sessionID);
-    console.log('  userId:', req.session.userId, 'orderStarted:', req.session.orderStarted);
-    if (!req.session.userId || !req.session.orderStarted) {
-        console.log('Redirecting - No valid session');
+    console.log('/order - userId:', req.session.userId);
+    if (!req.session.userId) {
+        console.log('No userId - redirecting');
         return res.redirect('/?error=session_required');
     }
     res.sendFile(path.join(__dirname, 'pages', 'order.html'));
 });
 
+// /payment - يحتاج orderCompleted
 app.get('/payment', (req, res) => {
-    console.log('/payment - userId:', req.session.userId);
-    if (!req.session.userId || !req.session.orderCompleted) {
+    console.log('/payment - userId:', req.session.userId, 'orderCompleted:', req.session.orderCompleted);
+    if (!req.session.userId) {
+        return res.redirect('/?error=session_required');
+    }
+    if (!req.session.orderCompleted) {
         return res.redirect('/?error=complete_order_first');
     }
     res.sendFile(path.join(__dirname, 'pages', 'payment.html'));
 });
 
+// /verification - يحتاج paymentCompleted
 app.get('/verification', (req, res) => {
-    if (!req.session.userId || !req.session.paymentCompleted) {
+    console.log('/verification - userId:', req.session.userId, 'paymentCompleted:', req.session.paymentCompleted);
+    if (!req.session.userId) {
+        return res.redirect('/?error=session_required');
+    }
+    if (!req.session.paymentCompleted) {
         return res.redirect('/?error=complete_payment_first');
     }
     res.sendFile(path.join(__dirname, 'pages', 'verification.html'));
 });
 
+// /success - يحتاج verified
 app.get('/success', (req, res) => {
-    if (!req.session.userId || !req.session.verified) {
+    console.log('/success - userId:', req.session.userId, 'verified:', req.session.verified);
+    if (!req.session.userId) {
+        return res.redirect('/');
+    }
+    if (!req.session.verified) {
         return res.redirect('/');
     }
     res.sendFile(path.join(__dirname, 'pages', 'success.html'));
 });
 
+// Catch-all
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
