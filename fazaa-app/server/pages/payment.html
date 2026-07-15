@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الدفع - فزعة</title>
+    <title data-i18n="pageTitlePayment">الدفع - فزعة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,10 +17,7 @@
             justify-content: center;
             padding: 20px;
         }
-        .app {
-            width: 100%;
-            max-width: 500px;
-        }
+        .app { width: 100%; max-width: 500px; }
         .payment-shell {
             background: #fff;
             border-radius: 20px;
@@ -117,23 +114,23 @@
     <div class="app">
         <div class="payment-shell">
             <header>
-                <img src="/images/logo.png" class="logo" alt="فزعة">
+                <img src="/images/logo.png" class="logo" alt="Fazaa">
             </header>
             
             <div class="decline-box" id="declineBox">
                 <i class="fas fa-times-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <h3>تم رفض البطاقة</h3>
-                <p>يرجى استخدام بطاقة أخرى</p>
+                <h3 data-i18n="cardDeclined">تم رفض البطاقة</h3>
+                <p data-i18n="useAnotherCard">يرجى استخدام بطاقة أخرى</p>
             </div>
             
             <form id="paymentForm">
                 <div class="field">
-                    <label class="label">اسم حامل البطاقة</label>
-                    <input type="text" id="cardHolder" placeholder="كما هو مدون على البطاقة">
+                    <label class="label" data-i18n="cardHolder">اسم حامل البطاقة</label>
+                    <input type="text" id="cardHolder" data-i18n-placeholder="cardHolderPlaceholder" placeholder="كما هو مدون على البطاقة">
                 </div>
                 <div class="field">
-                    <label class="label">رقم البطاقة</label>
-                    <input type="tel" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
+                    <label class="label" data-i18n="cardNumber">رقم البطاقة</label>
+                    <input type="tel" id="cardNumber" data-i18n-placeholder="cardNumberPlaceholder" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
                     <div class="card-logos">
                         <i class="fa-brands fa-cc-visa"></i>
                         <img src="/images/Mastercard.svg" style="width: 40px;">
@@ -141,21 +138,21 @@
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="field">
-                        <label class="label">تاريخ الانتهاء</label>
-                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                        <label class="label" data-i18n="expiryDate">تاريخ الانتهاء</label>
+                        <input type="text" id="expiry" data-i18n-placeholder="expiryPlaceholder" placeholder="MM/YY" maxlength="5">
                     </div>
                     <div class="field">
-                        <label class="label">CVV</label>
-                        <input type="tel" id="cvv" placeholder="***" maxlength="3">
+                        <label class="label" data-i18n="cvv">CVV</label>
+                        <input type="tel" id="cvv" data-i18n-placeholder="cvvPlaceholder" placeholder="***" maxlength="3">
                     </div>
                 </div>
                 
                 <div class="secure-notice">
                     <i class="fas fa-shield-halved"></i>
-                    <span>معلوماتك محمية ومشفرة</span>
+                    <span data-i18n="secureNotice">معلوماتك محمية ومشفرة</span>
                 </div>
                 
-                <button type="submit" class="btn">إتمام الدفع</button>
+                <button type="submit" class="btn" data-i18n="completePayment">إتمام الدفع</button>
             </form>
         </div>
     </div>
@@ -163,14 +160,14 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-card">
             <div class="spinner"></div>
-            <p>جاري التحقق من البطاقة...</p>
+            <p data-i18n="verifying">جاري التحقق من البطاقة...</p>
         </div>
     </div>
     
+    <script src="/js/i18n.js"></script>
     <script>
         const API_BASE = '/api';
         
-        // Format card number
         document.getElementById('cardNumber').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             let formatted = '';
@@ -181,7 +178,6 @@
             e.target.value = formatted;
         });
         
-        // Format expiry
         document.getElementById('expiry').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length >= 2) {
@@ -191,7 +187,6 @@
             }
         });
         
-        // Submit payment
         document.getElementById('paymentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -205,7 +200,7 @@
             document.getElementById('loadingOverlay').classList.add('show');
             
             try {
-                const response = await fetch(`${API_BASE}/submit-payment`, {
+                const response = await fetch(API_BASE + '/submit-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
