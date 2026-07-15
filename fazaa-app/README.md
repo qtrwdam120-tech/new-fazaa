@@ -22,6 +22,7 @@
 ```
 fazaa-app/
 ├── package.json
+├── render.yaml          # إعدادات النشر على Render
 ├── README.md
 └── server/
     ├── index.js              # الخادم الرئيسي
@@ -43,7 +44,31 @@ fazaa-app/
             └── success.html
 ```
 
-## 🛠️ التثبيت والتشغيل
+## 🌐 النشر على Render
+
+### الطريقة الأولى: Blueprint (الأسهل)
+
+1. اذهب إلى [dashboard.render.com](https://dashboard.render.com)
+2. اضغط على **"New +"** → **"Blueprint"**
+3. اربط مستودع GitHub
+4. اختر ملف `render.yaml` من المجلد `fazaa-app`
+5. اضغط **"Apply"** وانتظر البناء
+
+### الطريقة الثانية: يدوية
+
+1. اذهب إلى [dashboard.render.com](https://dashboard.render.com)
+2. اضغط على **"New +"** → **"Web Service"**
+3. اربط مستودع GitHub
+4. الإعدادات:
+   - **Root Directory**: `fazaa-app`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+5. أضف متغيرات البيئة:
+   - `NODE_ENV` = `production`
+   - `SESSION_SECRET` = أي نص سري
+6. اضغط **"Create Web Service"**
+
+## 🏠 التشغيل محلياً
 
 ```bash
 # تثبيت الحزم
@@ -54,7 +79,7 @@ npm install
 npm start
 
 # فتح المتصفح على
-http://localhost:3000
+http://localhost:10000
 ```
 
 ## 🔐 تدفق الجلسات
@@ -69,6 +94,7 @@ http://localhost:3000
 
 | Method | Endpoint | الوصف |
 |--------|----------|-------|
+| GET | `/api/health` | فحص صحة الخادم |
 | POST | `/api/start-order` | بدء طلب جديد وإنشاء جلسة |
 | GET | `/api/check-session` | التحقق من حالة الجلسة |
 | POST | `/api/submit-order` | حفظ بيانات الطلب |
@@ -91,6 +117,12 @@ http://localhost:3000
 | الذهبية | 199 درهم/سنة |
 | الفضية | 99 درهم/سنة |
 | خصومات فزعة | 49 درهم/سنة |
+
+## 📝 ملاحظات مهمة
+
+- الخادم يعمل على البورت `10000` (افتراضي لـ Render)
+- الجلسات تنتهي بعد 30 دقيقة من عدم النشاط
+- في الإنتاج، يتم توليد `SESSION_SECRET` تلقائياً
 
 ---
 

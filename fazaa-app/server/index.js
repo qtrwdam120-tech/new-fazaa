@@ -13,18 +13,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Session configuration
 app.use(session({
-    secret: 'fazaa-secret-key-2026',
+    secret: process.env.SESSION_SECRET || 'fazaa-secret-key-2026',
     resave: false,
     saveUninitialized: true,
     cookie: {
         maxAge: 30 * 60 * 1000, // 30 minutes
         httpOnly: true,
-        secure: false // Set to true in production with HTTPS
+        secure: process.env.NODE_ENV === 'production'
     }
 }));
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        service: 'fazaa-app',
+        version: '1.0.0'
+    });
+});
 
 // API Routes
 app.use('/api', routes);
