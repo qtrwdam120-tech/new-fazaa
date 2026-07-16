@@ -7,6 +7,7 @@ class OrderController {
         this.totalSteps = 3;
         this.formData = {};
         this.tier = localStorage.getItem('fazaaTier') || 'platinum';
+        this.savedDraft = null;
         
         this.prices = {
             platinum: 299,
@@ -19,19 +20,16 @@ class OrderController {
     }
     
     async init() {
-        // Check session
-        await this.checkSession();
+        const sessionOk = await this.checkSession();
+        if (!sessionOk) {
+            return;
+        }
         
-        // Cache elements
         this.cacheElements();
-        
-        // Bind events
         this.bindEvents();
-        
-        // Update UI
+        this.bindUnloadHandler();
+        this.restoreFormData(this.savedDraft);
         this.updateUI();
-        
-        // Set minimum date
         this.setMinDate();
     }
     
@@ -45,6 +43,8 @@ class OrderController {
                 return false;
             }
             
+            this.currentStep = Number(data.currentStep) || 1;
+            this.savedDraft = data.orderDraft || null;
             return true;
         } catch (error) {
             console.error('Session check failed:', error);
@@ -57,8 +57,8 @@ class OrderController {
         this.stepPanels = document.querySelectorAll('.order__step-panel');
         this.stepDots = document.querySelectorAll('.order__step-dot');
         this.stepLines = document.querySelectorAll('.order__step-line');
-        this.btnNext = document.getElementById('btnNext');
-        this.btnBack = document.getElementById('btnBack');
+        this.btnNext = document.getElementById('btnNext') || document.querySelector('[data-action="next"]');
+        this.btnBack = document.getElementById('btnBack') || document.querySelector('[data-action="back"]');
         this.orderForm = document.getElementById('orderForm');
         this.errorAlert = document.getElementById('errorAlert');
         this.errorText = document.getElementById('errorText');
@@ -66,15 +66,44 @@ class OrderController {
     }
     
     bindEvents() {
-        this.btnNext.addEventListener('click', () => this.handleNext());
-        this.btnBack.addEventListener('click', () => this.handleBack());
+        if (this.btnNext) {
+            this.btnNext.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.handleNext();
+            });
+        }
+        if (this.btnBack) {
+            this.btnBack.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.handleBack();
+            });
+        }
         
-        // Form inputs blur validation
-        const inputs = this.orderForm.querySelectorAll('.order__input');
+        const inputs = this.orderForm ? this.orderForm.querySelectorAll('.order__input') : [];
         inputs.forEach(input => {
             input.addEventListener('blur', () => this.validateField(input));
-            input.addEventListener('input', () => this.clearError(input));
+            input.addEventListener('input', () => {
+                this.clearError(input);
+                this.collectFormData();
+                this.saveProgress();
+            });
+            input.addEventListener('change', () => {
+                this.collectFormData();
+                this.saveProgress();
+            });
         });
+    }
+
+    bindUnloadHandler() {
+        const persist = () => {
+            this.collectFormData();
+            this.saveProgress(true);
+        };
+
+        window.addEventListener('beforeunload', persist);
+        window.addEventListener('pagehide', persist);
     }
     
     updateUI() {
@@ -118,36 +147,51 @@ class OrderController {
     
     updateButtons() {
         if (this.currentStep === 1) {
-            this.btnBack.innerHTML = '<i class="fas fa-home"></i> الرئيسية';
-            this.btnNext.textContent = 'المتابعة';
+            if (this.btnBack) {
+                this.btnBack.innerHTML = '<i class="fas fa-home"></i> الرئيسية';
+            }
+            if (this.btnNext) {
+                this.btnNext.textContent = 'المتابعة';
+            }
         } else if (this.currentStep === this.totalSteps) {
-            this.btnBack.innerHTML = '<i class="fas fa-arrow-right"></i> رجوع';
-            this.btnNext.innerHTML = '<i class="fas fa-check"></i> تأكيد الطلب';
+            if (this.btnBack) {
+                this.btnBack.innerHTML = '<i class="fas fa-arrow-right"></i> رجوع';
+            }
+            if (this.btnNext) {
+                this.btnNext.innerHTML = '<i class="fas fa-check"></i> تأكيد الطلب';
+            }
         } else {
-            this.btnBack.innerHTML = '<i class="fas fa-arrow-right"></i> رجوع';
-            this.btnNext.textContent = 'المتابعة';
+            if (this.btnBack) {
+                this.btnBack.innerHTML = '<i class="fas fa-arrow-right"></i> رجوع';
+            }
+            if (this.btnNext) {
+                this.btnNext.textContent = 'المتابعة';
+            }
         }
     }
     
-    handleNext() {
+    async handleNext() {
         if (this.currentStep < this.totalSteps) {
             if (this.validateCurrentStep()) {
+                this.collectFormData();
                 if (this.currentStep === 2) {
-                    this.collectFormData();
                     this.loadOrderSummary();
                 }
                 this.currentStep++;
                 this.updateUI();
+                await this.saveProgress();
             }
         } else {
             this.submitOrder();
         }
     }
     
-    handleBack() {
+    async handleBack() {
         if (this.currentStep > 1) {
+            this.collectFormData();
             this.currentStep--;
             this.updateUI();
+            await this.saveProgress();
         } else {
             window.location.href = '/';
         }
@@ -215,6 +259,60 @@ class OrderController {
             deliveryDate: document.getElementById('delivery-date').value,
             tier: this.tier
         };
+        return this.formData;
+    }
+
+    restoreFormData(draftData) {
+        if (!draftData || typeof draftData !== 'object') {
+            return;
+        }
+
+        const fieldMap = {
+            fullName: 'full-name',
+            phoneNumber: 'phone-number',
+            nationalId: 'national-id',
+            city: 'city',
+            street1: 'street-1',
+            street2: 'street-2',
+            deliveryDate: 'delivery-date'
+        };
+
+        Object.entries(fieldMap).forEach(([sourceKey, elementId]) => {
+            const input = document.getElementById(elementId);
+            if (input && draftData[sourceKey] !== undefined) {
+                input.value = draftData[sourceKey];
+            }
+        });
+
+        this.formData = { ...draftData };
+    }
+
+    async saveProgress(forceBeacon = false) {
+        const formData = this.collectFormData();
+        const payload = JSON.stringify({
+            currentStep: this.currentStep,
+            formData
+        });
+
+        try {
+            if (forceBeacon && typeof navigator !== 'undefined' && navigator.sendBeacon) {
+                const blob = new Blob([payload], { type: 'application/json' });
+                const sent = navigator.sendBeacon(`${API_BASE}/save-progress`, blob);
+                if (sent) {
+                    return true;
+                }
+            }
+
+            await fetch(`${API_BASE}/save-progress`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: payload
+            });
+            return true;
+        } catch (error) {
+            console.error('Failed to save order progress:', error);
+            return false;
+        }
     }
     
     loadOrderSummary() {
@@ -334,7 +432,16 @@ class OrderController {
     }
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     new OrderController();
+});
+
+const dateInput = document.getElementById('delivery-date');
+
+dateInput.addEventListener('focus', function() {
+    this.type = 'date'; 
+});
+
+dateInput.addEventListener('blur', function() {
+    if (!this.value) this.type = 'text'; 
 });

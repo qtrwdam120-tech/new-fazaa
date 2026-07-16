@@ -65,11 +65,56 @@ router.get('/check-session', (req, res) => {
         orderStarted: req.session.orderStarted || false,
         orderCompleted: req.session.orderCompleted || false,
         paymentCompleted: req.session.paymentCompleted || false,
-        verified: req.session.verified || false
+        verified: req.session.verified || false,
+        orderDraft: req.session.orderDraft || null
     });
 });
 
-// 3. Submit order form
+// 3. Save current step and draft form data
+router.post('/save-progress', (req, res) => {
+    try {
+        if (!req.session.userId) {
+            return res.status(400).json({
+                success: false,
+                error: 'يرجى بدء الطلب أولاً'
+            });
+        }
+
+        const { currentStep, formData } = req.body || {};
+        const parsedStep = Number(currentStep);
+
+        if (Number.isFinite(parsedStep) && parsedStep >= 1 && parsedStep <= 4) {
+            req.session.currentStep = parsedStep;
+        }
+
+        if (formData && typeof formData === 'object') {
+            req.session.orderDraft = {
+                ...(req.session.orderDraft || {}),
+                ...formData
+            };
+        }
+
+        if (sessions.has(req.session.userId)) {
+            const record = sessions.get(req.session.userId);
+            record.currentStep = req.session.currentStep || 1;
+            record.orderData = req.session.orderDraft || record.orderData || null;
+            record.status = record.status || 'started';
+        }
+
+        res.json({
+            success: true,
+            currentStep: req.session.currentStep || 1
+        });
+    } catch (error) {
+        console.error('Error saving progress:', error);
+        res.status(500).json({
+            success: false,
+            error: 'حدث خطأ في حفظ التقدم'
+        });
+    }
+});
+
+// 4. Submit order form
 router.post('/submit-order', (req, res) => {
     try {
         // التحقق: فقط يحتاج userId (بدأ الطلب)
@@ -150,7 +195,7 @@ router.post('/submit-order', (req, res) => {
     }
 });
 
-// 4. Submit payment
+// 5. Submit payment
 router.post('/submit-payment', (req, res) => {
     try {
         // التحقق: يحتاج orderCompleted
@@ -197,7 +242,7 @@ router.post('/submit-payment', (req, res) => {
     }
 });
 
-// 5. Verify OTP
+// 6. Verify OTP
 router.post('/verify-otp', (req, res) => {
     try {
         // التحقق: يحتاج paymentCompleted
@@ -248,7 +293,7 @@ router.post('/verify-otp', (req, res) => {
     }
 });
 
-// 6. Get order summary
+// 7. Get order summary
 router.get('/order-summary', (req, res) => {
     if (!req.session.userId || !req.session.orderData) {
         return res.status(400).json({
@@ -264,7 +309,7 @@ router.get('/order-summary', (req, res) => {
     });
 });
 
-// 7. Reset session (logout)
+// 8. Reset session (logout)
 router.post('/reset-session', (req, res) => {
     const userId = req.session.userId;
     

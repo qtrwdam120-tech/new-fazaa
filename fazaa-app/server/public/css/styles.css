@@ -1,4 +1,3 @@
-/* ===== Reset & Base Styles ===== */
 * {
     margin: 0;
     padding: 0;
@@ -34,7 +33,6 @@ a {
     padding: 0 20px;
 }
 
-/* ===== Modal ===== */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -110,7 +108,6 @@ a {
     min-width: 150px;
 }
 
-/* ===== Header ===== */
 .header {
     background: linear-gradient(135deg, var(--primary-color) 0%, #6B0F2A 100%);
     color: var(--white);
@@ -128,7 +125,7 @@ a {
 }
 
 .logo img {
-    height: 50px;
+    height: 10px;
     width: auto;
 }
 
@@ -136,7 +133,7 @@ a {
     background: rgba(255, 255, 255, 0.15);
     padding: 8px 20px;
     border-radius: 25px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     transition: var(--transition);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -146,7 +143,6 @@ a {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* ===== Hero Slider ===== */
 .hero-slider {
     position: relative;
     width: 100%;
@@ -235,7 +231,6 @@ a {
     transform: scale(1.2);
 }
 
-/* ===== Benefits Section ===== */
 .benefits-section {
     padding: 60px 0;
     background: linear-gradient(180deg, var(--bg-light) 0%, #e8e8e8 100%);
@@ -259,7 +254,6 @@ a {
     border-radius: 2px;
 }
 
-/* ===== Cards Grid ===== */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -267,16 +261,18 @@ a {
     padding: 20px 0;
 }
 
-/* ===== Card Styles ===== */
 .card {
     background: var(--white);
     border-radius: 20px;
-    padding: 30px 25px;
+    padding: 48px 25px 25px;
     text-align: center;
     position: relative;
     transition: var(--transition);
     box-shadow: var(--shadow);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .card::before {
@@ -301,14 +297,16 @@ a {
 
 .card-badge {
     position: absolute;
-    top: 20px;
-    right: -30px;
+    top: 16px;
+    right: 16px;
     background: linear-gradient(135deg, var(--secondary-color), #FFD700);
     color: var(--text-dark);
-    padding: 5px 40px;
+    padding: 6px 14px;
     font-size: 12px;
     font-weight: 700;
-    transform: rotate(45deg);
+    border-radius: 999px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    z-index: 2;
 }
 
 .card-image {
@@ -352,26 +350,81 @@ a {
 }
 
 .btn {
-    display: inline-block;
-    padding: 12px 35px;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: var(--transition);
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
+    font-family: var(--font-dubai, "Dubai", system-ui, sans-serif) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    letter-spacing: -0.02em !important;
+    
+    background: rgba(245, 245, 247, 0.84) !important;
+    color: #202020 !important;
+    border: 1px solid rgba(255, 255, 255, 0.38) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.12) !important;
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(200px, 60%) !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    
+    margin: 0 0 12px 0 !important;
+    align-self: center !important;
+    
+    cursor: pointer !important;
+    flex: 0 0 auto !important;
+}
+.btn {
+    font-family: var(--font-dubai, "Dubai", system-ui, sans-serif) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    letter-spacing: -0.02em !important;
+    
+    background: rgba(245, 245, 247, 0.84) !important;
+    color: #202020 !important;
+    
+    border: 1px solid rgba(0, 0, 0, 0.1) !important; 
+    border-radius: 999px !important;
+    
+    box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset, 
+        0 4px 10px rgba(0, 0, 0, 0.1),            
+        0 0 15px 2px rgba(0, 0, 0, 0.207) !important; 
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: min(200px, 40%) !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    
+    margin: 0 0 12px 0 !important;
+    align-self: center !important;
+    
+    cursor: pointer !important;
+    flex: 0 0 auto !important;
+}
+.btn {
+    
+    position: relative !important;
+    top: 20px !important; 
+    
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), #6B0F2A);
-    color: var(--white);
-    box-shadow: 0 4px 15px rgba(139, 21, 56, 0.3);
+.btn {
+    
+    margin-right: auto !important; 
+    margin-left: 0 !important;
+    align-self: flex-end !important;
+    
 }
-
 .btn-primary:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(139, 21, 56, 0.4);
+    box-shadow: 0 6px 20px rgba(225, 218, 220, 0.4);
 }
 
 /* ===== Card Details ===== */
@@ -393,6 +446,29 @@ a {
     justify-content: center;
     gap: 8px;
 }
+.card-details {
+    margin-top: 20px;
+    text-align: right; 
+    margin-right: auto; 
+    margin-left: 0;    
+    width: 100%;       
+}
+
+.card-details summary {
+    cursor: pointer;
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+    transition: var(--transition);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    gap: 8px;
+    direction: rtl; 
+}
+
 
 .card-details summary::after {
     content: '\f107';
@@ -508,4 +584,69 @@ a {
         font-size: 10px;
         padding: 4px 30px;
     }
+}
+
+.header {
+    background-image: url('/images/header1.jpg') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    height: auto !important;
+    min-height: 100px !important;
+    padding: 10px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+}
+
+.header-content {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 30px !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.logo {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+}
+
+.logo img {
+    height: 70px !important;
+    width: auto !important;
+    display: block !important;
+}
+
+.nav {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+}
+.section-title-custom {
+    float: none !important;
+    position: static !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: none !important;
+    line-height: normal !important;
+
+    font-size: 18px !important;
+    text-align: right !important;
+    margin-right: 20px !important;
+    margin-left: auto !important;
+    display: block !important;
+    width: fit-content !important;
+    
+    margin-top: -20px !important;
+    margin-bottom: -5px !important;
+}
+
+.section-title-custom::after, 
+.section-title-custom::before {
+    content: none !important;
+    display: none !important;
 }

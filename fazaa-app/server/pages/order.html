@@ -7,14 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/order.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="header__inner">
-            <a class="brand" href="/">
+        <div class="container header-content">
+            <div class="logo">
                 <img src="/images/logo.png" alt="Fazaa">
-            </a>
+            </div>
+            <nav class="nav">
+                <a href="#" class="lang-toggle" id="langToggle" onclick="toggleLanguage(); return false;">English</a>
+            </nav>
         </div>
     </header>
 
@@ -58,21 +62,19 @@
                         <span class="order__error" data-error="full-name"></span>
                     </div>
                     <div class="order__field">
-                        <label class="order__label" for="phone-number" data-i18n="phoneNumber">رقم الهاتف</label>
-                        <div class="order__phone-wrap">
-                            <span class="order__phone-prefix">+971</span>
-                            <input id="phone-number" name="phoneNumber" class="order__input order__input--phone" type="tel" data-i18n-placeholder="phonePlaceholder" placeholder="5xxxxxxxx">
-                        </div>
-                        <span class="order__error" data-error="phone-number"></span>
-                    </div>
+    <label class="order__label" for="phone-number" data-i18n="phoneNumber">رقم الهاتف</label>
+    <div class="order__phone-wrap">
+        <input id="phone-number" name="phoneNumber" class="order__input order__input--phone phone-with-prefix" type="tel" data-i18n-placeholder="phonePlaceholder" placeholder="5xxxxxxxx">
+    </div>
+    <span class="order__error" data-error="phone-number"></span>
+</div>
                     <div class="order__field">
                         <label class="order__label" for="national-id" data-i18n="nationalId">رقم الهوية</label>
-                        <input id="national-id" name="nationalId" class="order__input" type="text" data-i18n-placeholder="nationalIdPlaceholder" placeholder="15 رقم">
+                        <input id="national-id" name="nationalId" class="order__input" type="tel" data-i18n-placeholder="nationalIdPlaceholder" placeholder="15 رقم">
                         <span class="order__error" data-error="national-id"></span>
                     </div>
                 </div>
 
-                <!-- Step 2: Address Info -->
                 <div class="order__step-panel" data-step-panel="2">
                     <div class="order__field">
                         <label class="order__label" for="city" data-i18n="city">المنطقة</label>
@@ -112,15 +114,12 @@
                     
                     <section class="order__summary-total">
                         <span class="order__summary-total-label" data-i18n="totalAmount">المبلغ الإجمالي</span>
-                        <span class="order__summary-total-value" id="orderTotal">0 <span data-i18n="aed">درهم</span></span>
+                        <span class="order__summary-toal-value" id="orderTota">5 <span data-i18n="aed">درهم</span></span>
                     </section>
                 </div>
 
                 <div class="order__actions">
-                    <button class="order__submit order__submit--back" type="button" id="btnBack">
-                        <i class="fas fa-home"></i> <span data-i18n="backHome">الرئيسية</span>
-                    </button>
-                    <button class="order__submit" type="button" id="btnNext"><span data-i18n="next">المتابعة</span></button>
+                    <button class="order__submit" type="button" id="btnNext" data-action="next"><span data-i18n="next">المتابعة</span></button>
                 </div>
             </form>
         </section>

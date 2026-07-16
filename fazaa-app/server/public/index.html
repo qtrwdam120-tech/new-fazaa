@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <!-- Error Modal -->
     <div class="modal-overlay" id="errorModal">
         <div class="modal">
             <div class="modal-icon error">
@@ -58,8 +58,9 @@
     <!-- Benefits Section -->
     <section class="benefits-section">
         <div class="container">
-            <h2 class="section-title" data-i18n="membershipBenefits">مزايا العضوية</h2>
-            
+        <div> 
+    <h2 class="section-title section-title-custom" data-i18n="membershipBenefits">مزايا العضوية</h2>
+</div>
             <div class="cards-grid">
                 <!-- Platinum Card -->
                 <div class="card platinum" data-tier="platinum">
@@ -69,7 +70,6 @@
                     </div>
                     <h3 class="card-title" data-i18n="platinum">البلاتينية</h3>
                     <p class="card-desc" data-i18n="platinumDesc">أوسع مزايا وعروض حصرية</p>
-                    <p class="card-price"><span data-i18n="pricePlatinum">299</span> <span data-i18n="currency">درهم</span> / <span data-i18n="year">سنة</span></p>
                     <button class="btn btn-primary btn-order" onclick="startOrder('platinum')" data-i18n="orderNow">أطلب الآن</button>
                     <details class="card-details">
                         <summary data-i18n="showMore">عرض المزيد</summary>
@@ -95,7 +95,6 @@
                     </div>
                     <h3 class="card-title" data-i18n="gold">الذهبية</h3>
                     <p class="card-desc" data-i18n="goldDesc">عروض وخصومات مميزة</p>
-                    <p class="card-price"><span data-i18n="priceGold">199</span> <span data-i18n="currency">درهم</span> / <span data-i18n="year">سنة</span></p>
                     <button class="btn btn-primary btn-order" onclick="startOrder('gold')" data-i18n="orderNow">أطلب الآن</button>
                     <details class="card-details">
                         <summary data-i18n="showMore">عرض المزيد</summary>
@@ -119,7 +118,6 @@
                     </div>
                     <h3 class="card-title" data-i18n="silver">الفضية</h3>
                     <p class="card-desc" data-i18n="silverDesc">خصومات وخدمات أساسية</p>
-                    <p class="card-price"><span data-i18n="priceSilver">99</span> <span data-i18n="currency">درهم</span> / <span data-i18n="year">سنة</span></p>
                     <button class="btn btn-primary btn-order" onclick="startOrder('silver')" data-i18n="orderNow">أطلب الآن</button>
                     <details class="card-details">
                         <summary data-i18n="showMore">عرض المزيد</summary>
@@ -141,7 +139,6 @@
                     </div>
                     <h3 class="card-title" data-i18n="fazaaDiscount">خصومات فزعة</h3>
                     <p class="card-desc" data-i18n="fazaaDiscountDesc">خصومات مختارة يومياً</p>
-                    <p class="card-price"><span data-i18n="priceFazaa">49</span> <span data-i18n="currency">درهم</span> / <span data-i18n="year">سنة</span></p>
                     <button class="btn btn-primary btn-order" onclick="startOrder('fazaa')" data-i18n="orderNow">أطلب الآن</button>
                     <details class="card-details">
                         <summary data-i18n="showMore">عرض المزيد</summary>
