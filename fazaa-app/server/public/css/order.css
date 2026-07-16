@@ -34,6 +34,7 @@ right: auto;
     font-weight: 600;
     font-size: 1rem;
     white-space: nowrap;
+    order: 1;
 }
 
 .phone-with-prefix {
@@ -45,9 +46,10 @@ right: auto;
     background: transparent;
     direction: ltr;
     text-align: left;
+    order: 2;
 }
 
-/* RTL Support */
+/* RTL Support - swap the order */
 [dir="rtl"] .order__phone-prefix {
     order: 2;
 }
