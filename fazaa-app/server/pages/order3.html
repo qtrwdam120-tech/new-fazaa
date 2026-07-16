@@ -226,6 +226,9 @@
         });
         
         async function proceedToPayment() {
+            // بدء جلسة أولاً إن لم تكن موجودة
+            await fetch('/api/start-order', { method: 'POST' });
+            
             var response = await fetch('/api/submit-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
