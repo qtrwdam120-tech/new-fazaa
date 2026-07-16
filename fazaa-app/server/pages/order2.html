@@ -4,85 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فزعة - التسجيل</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 500px; }
-        .card { background: #fff; border-radius: 24px; padding: 40px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .logo { text-align: center; margin-bottom: 30px; }
-        .logo img { width: 100px; }
-        .step-indicator { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 30px; }
-        .step-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
-        .step-dot.completed { background: #28a745; color: #fff; }
-        .step-dot.active { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
-        .step-dot.inactive { background: #e0e0e0; color: #999; }
-        .step-line { width: 40px; height: 3px; background: #28a745; border-radius: 2px; }
-        .title { text-align: center; font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; }
-        .subtitle { text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 30px; }
-        .field { margin-bottom: 20px; }
-        .label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        .required { color: #dc3545; }
-        input, select { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; font-family: inherit; }
-        input:focus, select:focus { outline: none; border-color: #8B1538; }
-        select { cursor: pointer; }
-        .error { color: #dc3545; font-size: 0.85rem; margin-top: 6px; display: none; }
-        .error.show { display: block; }
-        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
-        .btn { flex: 1; padding: 18px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.3s; text-align: center; }
-        .btn-back { background: #e0e0e0; color: #333; }
-        .btn-next { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
-        .btn:hover { transform: translateY(-2px); }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="logo"><img src="/images/logo.png" alt="Fazaa"></div>
-            <div class="step-indicator">
-                <div class="step-dot completed"><i class="fas fa-check"></i></div>
-                <div class="step-line"></div>
-                <div class="step-dot active">2</div>
-                <div class="step-line"></div>
-                <div class="step-dot inactive">3</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/images/logo.png" alt="Fazaa">
             </div>
-            <h1 class="title">معلومات العنوان</h1>
-            <p class="subtitle">يرجى إدخال بيانات العنوان</p>
-            <form id="orderForm2">
-                <div class="field">
-                    <label class="label">المنطقة <span class="required">*</span></label>
-                    <select id="city" required>
-                        <option value="">اختر المنطقة</option>
-                        <option value="dubai">دبي</option>
-                        <option value="abu-dhabi">أبوظبي</option>
-                        <option value="sharjah">الشارقة</option>
-                        <option value="ajman">عجمان</option>
-                    </select>
-                    <div class="error" id="cityError">هذا الحقل مطلوب</div>
-                </div>
-                <div class="field">
-                    <label class="label">عنوان الشارع <span class="required">*</span></label>
-                    <input type="text" id="street" placeholder="يرجى إدخال عنوان الشارع">
-                    <div class="error" id="streetError">هذا الحقل مطلوب</div>
-                </div>
-                <div class="field">
-                    <label class="label">الحي</label>
-                    <input type="text" id="neighborhood" placeholder="يرجى إدخال اسم الحي">
-                </div>
-                <div class="field">
-                    <label class="label">موعد الاستلام</label>
-                    <input type="date" id="deliveryDate">
-                </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-back" onclick="goBack()">رجوع</button>
-                    <button type="submit" class="btn btn-next">متابعة</button>
-                </div>
-            </form>
+            <nav class="nav">
+                <a href="#" class="lang-toggle" id="langToggle" onclick="toggleLanguage(); return false;">English</a>
+            </nav>
         </div>
-    </div>
+    </header>
+
+    <!-- Content -->
+    <main class="order-page">
+        <div class="container">
+            <div class="order-form">
+                <div class="order-header">
+                    <h1>معلومات العنوان</h1>
+                    <p>يرجى إدخال بيانات العنوان</p>
+                </div>
+
+                <!-- Step Indicator -->
+                <div class="steps-indicator">
+                    <div class="step completed">
+                        <div class="step-number"><i class="fas fa-check"></i></div>
+                        <div class="step-label">معلومات شخصية</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step active">
+                        <div class="step-number">2</div>
+                        <div class="step-label">العنوان</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">الدفع</div>
+                    </div>
+                </div>
+
+                <form id="orderForm2">
+                    <div class="form-group">
+                        <label>المنطقة <span class="required">*</span></label>
+                        <select id="city" required>
+                            <option value="">اختر المنطقة</option>
+                            <option value="dubai">دبي</option>
+                            <option value="abu-dhabi">أبوظبي</option>
+                            <option value="sharjah">الشارقة</option>
+                            <option value="ajman">عجمان</option>
+                        </select>
+                        <span class="error-msg" id="cityError">هذا الحقل مطلوب</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>عنوان الشارع <span class="required">*</span></label>
+                        <input type="text" id="street" placeholder="يرجى إدخال عنوان الشارع" required>
+                        <span class="error-msg" id="streetError">هذا الحقل مطلوب</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الحي</label>
+                        <input type="text" id="neighborhood" placeholder="يرجى إدخال اسم الحي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>موعد الاستلام</label>
+                        <input type="date" id="deliveryDate">
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn-secondary" onclick="window.location.href='/order1'"><i class="fas fa-arrow-right"></i> رجوع</button>
+                        <button type="submit" class="btn-primary">متابعة <i class="fas fa-arrow-left"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="brand-name">فزعة</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">سياسة الخصوصية</a>
+                <a href="#">شروط الخدمة</a>
+                <a href="#">الدعم</a>
+                <a href="#">الأسئلة الشائعة</a>
+            </div>
+            <div class="footer-copyright">
+                <p>© 2026 فزعة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/i18n.js"></script>
+    <style>
+        .order-page { min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 0; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); }
+        .order-form { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .order-header { text-align: center; margin-bottom: 30px; }
+        .order-header h1 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 8px; }
+        .order-header p { color: #666; font-size: 0.95rem; }
+        .steps-indicator { display: flex; justify-content: center; align-items: center; margin-bottom: 35px; }
+        .step { text-align: center; }
+        .step-number { width: 45px; height: 45px; border-radius: 50%; background: #e0e0e0; color: #666; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto 8px; }
+        .step.active .step-number { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
+        .step.completed .step-number { background: #28a745; color: #fff; }
+        .step-label { font-size: 0.85rem; color: #666; }
+        .step.active .step-label { color: #8B1538; font-weight: 600; }
+        .step-line { width: 50px; height: 3px; background: #28a745; margin: 0 10px; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #8B1538; }
+        .error-msg { color: #dc3545; font-size: 0.85rem; margin-top: 6px; display: none; }
+        .error-msg.show { display: block; }
+        .required { color: #dc3545; }
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-primary { flex: 1; padding: 16px; background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-secondary { flex: 1; padding: 16px; background: #e0e0e0; color: #333; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
+        [dir="ltr"] .btn-primary i, [dir="ltr"] .btn-secondary i { transform: scaleX(-1); }
+    </style>
     <script>
-        function goBack() { window.location.href = '/order1'; }
         document.getElementById('orderForm2').addEventListener('submit', function(e) {
             e.preventDefault();
             var city = document.getElementById('city').value;
