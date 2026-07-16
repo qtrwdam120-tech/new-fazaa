@@ -56,9 +56,23 @@ app.get('/order3', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'order3.html'));
 });
 
-// /order - redirect to /order1
-app.get('/order', (req, res) => {
-    res.redirect('/order1');
+// /order - start session on server then redirect to /order1
+app.get('/order', async (req, res, next) => {
+    try {
+        // Start session if not exists
+        if (!req.session.userId) {
+            const { v4: uuidv4 } = require('uuid');
+            req.session.userId = uuidv4();
+            req.session.currentStep = 1;
+            req.session.orderStarted = false;
+            req.session.orderCompleted = false;
+            req.session.paymentCompleted = false;
+            req.session.verified = false;
+        }
+        res.redirect('/order1');
+    } catch (error) {
+        next(error);
+    }
 });
 
 // /payment - يحتاج orderCompleted
