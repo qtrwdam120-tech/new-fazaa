@@ -78,7 +78,19 @@ app.get('/order', async (req, res, next) => {
             req.session.orderData.tier = tier;
         }
         
-        res.redirect('/order1');
+        // Send HTML that redirects with meta refresh (more reliable for cookies)
+        res.send(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta http-equiv="refresh" content="0;url=/order1">
+                <script>window.location.replace('/order1');</script>
+            </head>
+            <body>
+                <p>جاري التحويل...</p>
+            </body>
+            </html>
+        `);
     } catch (error) {
         next(error);
     }
