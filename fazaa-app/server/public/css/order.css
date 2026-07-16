@@ -19,45 +19,62 @@ right: auto;
 .order__phone-wrap {
     position: relative;
     width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
     border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
     background-color: #f5f5f5;
-    padding: 2px;
+    background-image: linear-gradient(to right, #f5f5f5 60px, transparent 60px);
+    background-position: left center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
 }
 
-.order__phone-prefix {
-    background-color: #e8e8e8;
-    color: var(--text-dark);
-    padding: 12px 15px;
+/* RTL: الخلفية الرمادية على اليمين */
+[dir="rtl"] .order__phone-wrap {
+    background-image: linear-gradient(to left, #f5f5f5 60px, transparent 60px);
+    background-position: right center;
+}
+
+/* +971 يظهر فوق الخلفية الرمادية */
+.order__phone-wrap::after {
+    content: "+971";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
     font-weight: 600;
     font-size: 1rem;
-    white-space: nowrap;
-    order: 1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* RTL: +971 على اليمين */
+[dir="rtl"] .order__phone-wrap::after {
+    left: auto;
+    right: 15px;
 }
 
 .phone-with-prefix {
-    flex: 1;
-    padding: 12px 15px;
+    width: 100%;
+    padding: 0;
+    padding-right: 10px;
     border: none;
     font-size: 1rem;
     font-family: inherit;
     background: transparent;
     direction: ltr;
     text-align: left;
-    order: 2;
+    position: relative;
+    z-index: 2;
 }
 
-/* RTL Support - swap the order */
-[dir="rtl"] .order__phone-prefix {
-    order: 2;
-}
-
+/* RTL: النص من اليمين لليسار */
 [dir="rtl"] .phone-with-prefix {
     direction: rtl;
     text-align: right;
-    order: 1;
+    padding-right: 0;
+    padding-left: 10px;
 }
 
 .phone-with-prefix:focus {
