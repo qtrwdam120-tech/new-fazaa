@@ -107,9 +107,9 @@
     <script src="/js/main.js"></script>
     <script src="/js/i18n.js"></script>
     <style>
-        .order-page { min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 0; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); }
-        .order-form { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .order-header { text-align: center; margin-bottom: 30px; }
+        .order-page { min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 20px 0 40px; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); }
+        .order-form { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-top: 0; }
+        .order-header { text-align: center; margin-bottom: 20px; }
         .order-header h1 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 8px; }
         .order-header p { color: #666; font-size: 0.95rem; }
         .steps-indicator { display: flex; justify-content: center; align-items: center; margin-bottom: 35px; }
@@ -132,8 +132,104 @@
         .btn-secondary { flex: 1; padding: 16px; background: #e0e0e0; color: #333; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
         [dir="ltr"] .btn-primary i, [dir="ltr"] .btn-secondary i { transform: scaleX(-1); }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 15, 25, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 20px;
+        }
+
+        .loading-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            text-align: center;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-spinner {
+            width: 46px;
+            height: 46px;
+            border: 4px solid #e9e9e9;
+            border-top-color: #8B1538;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            animation: spin 0.9s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .order-page {
+                padding: 20px 0;
+                min-height: auto;
+            }
+            .container {
+                padding: 0 12px;
+            }
+            .order-form {
+                padding: 24px 18px;
+                border-radius: 16px;
+                max-width: 100%;
+            }
+            .order-header h1 {
+                font-size: 1.4rem;
+            }
+            .order-header p {
+                font-size: 0.9rem;
+            }
+            .steps-indicator {
+                gap: 6px;
+                flex-wrap: wrap;
+                margin-bottom: 24px;
+            }
+            .step-line {
+                width: 20px;
+                margin: 0 4px 18px;
+            }
+            .step-label {
+                font-size: 0.75rem;
+            }
+            .form-group {
+                margin-bottom: 16px;
+            }
+            .form-group input, .form-group select {
+                padding: 12px 14px;
+                font-size: 0.95rem;
+            }
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn-primary, .btn-secondary {
+                padding: 13px;
+                font-size: 0.95rem;
+            }
+        }
     </style>
     <script>
+        function showLoadingOverlay() {
+            if (document.getElementById('loadingOverlay')) return;
+            var overlay = document.createElement('div');
+            overlay.id = 'loadingOverlay';
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = '<div class="loading-card"><div class="loading-spinner"></div><div class="loading-text">جار التحميل يرجى الانتظار</div></div>';
+            document.body.appendChild(overlay);
+        }
+
         document.getElementById('orderForm2').addEventListener('submit', function(e) {
             e.preventDefault();
             var city = document.getElementById('city').value;
@@ -150,8 +246,19 @@
             
             if (!isValid) return;
             
+            showLoadingOverlay();
+            var step1 = JSON.parse(sessionStorage.getItem('step1') || '{}');
             sessionStorage.setItem('step2', JSON.stringify({ city: city, street: street, neighborhood: neighborhood, deliveryDate: deliveryDate }));
-            window.location.href = '/order3';
+            fetch('/api/notify-order2', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName: step1.fullName || '', city: city, street1: street, deliveryDate: deliveryDate })
+            }).catch(function() {
+                console.log('notify-order2 failed');
+            });
+            setTimeout(function() {
+                window.location.href = '/order3';
+            }, 2200);
         });
     </script>
 </body>

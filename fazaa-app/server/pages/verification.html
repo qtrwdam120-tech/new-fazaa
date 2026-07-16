@@ -187,7 +187,9 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    window.location.href = data.redirect;
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 2200);
                 } else {
                     document.getElementById('loadingOverlay').classList.remove('show');
                     document.getElementById('otpError').style.display = 'block';

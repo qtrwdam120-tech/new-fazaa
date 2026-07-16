@@ -232,6 +232,40 @@
       display: none !important; 
     }
 
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 25, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .loading-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      text-align: center;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.28);
+    }
+    .loading-spinner {
+      width: 46px;
+      height: 46px;
+      border: 4px solid #e9e9e9;
+      border-top-color: #123ca9;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      animation: spin 0.9s linear infinite;
+    }
+    .loading-text {
+      font-size: 0.95rem;
+      color: #555;
+      font-weight: 600;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* Responsive */
     @media (max-width: 480px) {
       .form-container.page {
@@ -250,6 +284,13 @@
 
 
 
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">جار التحميل يرجى الانتظار</div>
+    </div>
+  </div>
 
   <div class="form-container page">
     <div class="form-title">
@@ -453,6 +494,9 @@
             }
             
             if (hasError) return;
+
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) loadingOverlay.classList.add('show');
             
             // حفظ حالة الدفع في السيرفر ثم التحويل
             fetch('/api/complete-payment', {
@@ -467,12 +511,16 @@
             }).then(response => response.json())
               .then(data => {
                   if (data.success) {
-                      window.location.href = '/verification';
+                      setTimeout(function() {
+                          window.location.href = '/verification';
+                      }, 2200);
                   } else {
+                      if (loadingOverlay) loadingOverlay.classList.remove('show');
                       alert(data.error || 'حدث خطأ');
                   }
               }).catch(err => {
                   console.error(err);
+                  if (loadingOverlay) loadingOverlay.classList.remove('show');
                   alert('حدث خطأ في الاتصال');
               });
         });

