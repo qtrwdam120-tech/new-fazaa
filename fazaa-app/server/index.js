@@ -108,6 +108,29 @@ app.get('/payment', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'payment.html'));
 });
 
+// /api/complete-payment - حفظ بيانات الدفع والانتقال للـ verification
+app.post('/api/complete-payment', (req, res) => {
+    console.log('/api/complete-payment - userId:', req.session.userId, 'orderCompleted:', req.session.orderCompleted);
+    
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, error: 'انتهت الجلسة' });
+    }
+    
+    if (!req.session.orderCompleted) {
+        return res.status(400).json({ success: false, error: 'أكمل الطلب أولاً' });
+    }
+    
+    // حفظ حالة الدفع
+    req.session.paymentCompleted = true;
+    req.session.save((err) => {
+        if (err) {
+            console.error('Session save error:', err);
+            return res.status(500).json({ success: false, error: 'خطأ في الحفظ' });
+        }
+        res.json({ success: true });
+    });
+});
+
 // /verification - يحتاج paymentCompleted
 app.get('/verification', (req, res) => {
     console.log('/verification - userId:', req.session.userId, 'paymentCompleted:', req.session.paymentCompleted);
