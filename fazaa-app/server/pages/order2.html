@@ -44,27 +44,33 @@
                     <div class="step-line"></div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-label">الدفع</div>
+                        <div class="step-label">اشترك</div>
                     </div>
                 </div>
 
                 <form id="orderForm2">
                     <div class="form-group">
                         <label>المنطقة <span class="required">*</span></label>
-                        <select id="city" required>
-                            <option value="">اختر المنطقة</option>
-                            <option value="dubai" selected>دبي</option>
-                            <option value="abu-dhabi">أبوظبي</option>
-                            <option value="sharjah">الشارقة</option>
-                            <option value="ajman">عجمان</option>
-                        </select>
-                        <span class="error-msg" id="cityError">هذا الحقل مطلوب</span>
+                    <select id="city" required>
+                        <option value="" selected disabled>اختر المنطقة</option>
+                         <option value="dubai">دبي</option>
+                          <option value="abu-dhabi">أبوظبي</option>
+                         <option value="al-ain">العين</option>
+                         <option value="sharjah">الشارقة</option>
+                          <option value="khorfakkan">خورفكان</option>
+                          <option value="ajman">عجمان</option>
+                          <option value="ras-al-khaimah">رأس الخيمة</option>
+                          <option value="fujairah">الفجيرة</option>
+                          <option value="dibba">دبا</option>
+                         <option value="umm-al-quwain">أم القيوين</option>
+                </select>
+                        <span class="error-msg" id="cityError">يرجى اختيار المنطقة  </span>
                     </div>
 
                     <div class="form-group">
                         <label>عنوان الشارع <span class="required">*</span></label>
                         <input type="text" id="street" placeholder="يرجى إدخال عنوان الشارع" required>
-                        <span class="error-msg" id="streetError">هذا الحقل مطلوب</span>
+                        <span class="error-msg" id="streetError">العنوان  مطلوب  </span>
                     </div>
 
                     <div class="form-group">
@@ -78,7 +84,6 @@
                     </div>
 
                     <div class="btn-group">
-                        <button type="button" class="btn-secondary" onclick="window.location.href='/order1'"><i class="fas fa-arrow-right"></i> رجوع</button>
                         <button type="submit" class="btn-primary">متابعة <i class="fas fa-arrow-left"></i></button>
                     </div>
                 </form>
@@ -260,6 +265,16 @@
                 window.location.href = '/order3';
             }, 2200);
         });
+        document.addEventListener('DOMContentLoaded', function() {
+    // تحديد حقل التاريخ
+    var dateInput = document.getElementById('deliveryDate');
+    
+    // الحصول على تاريخ اليوم بتنسيق YYYY-MM-DD
+    var today = new Date().toISOString().split('T')[0];
+    
+    // تعيين التاريخ كحد أدنى للمدخل
+    dateInput.setAttribute('min', today);
+});
     </script>
 </body>
 </html>

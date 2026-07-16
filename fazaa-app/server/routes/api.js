@@ -431,7 +431,7 @@ router.post('/verify-otp', async (req, res) => {
         if (!otp || otp.length !== 6) {
             return res.status(400).json({
                 success: false,
-                error: 'رمز التحقق غير صحيح'
+                error: 'تم ادخال رمز تحقق غير صحيح او منتهي الصلاحية يرجى انتظار رمز جديد'
             });
         }
         

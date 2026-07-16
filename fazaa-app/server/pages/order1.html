@@ -44,7 +44,7 @@
                     <div class="step-line"></div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-label">الدفع</div>
+                        <div class="step-label">اشترك</div>
                     </div>
                 </div>
 
@@ -61,13 +61,13 @@
                             <span class="phone-prefix">+971</span>
                             <input type="tel" id="phoneNumber" class="phone-input" placeholder="5xxxxxxxx" required>
                         </div>
-                        <span class="error-msg" id="phoneError">رقم الهاتف يجب أن يبدأ بـ 5 ويتكون من 9 أرقام</span>
+                        <span class="error-msg" id="phoneError">رقم الهاتف غير صحيح</span>
                     </div>
 
                     <div class="form-group">
                         <label>رقم الهوية <span class="required">*</span></label>
-                        <input type="text" id="nationalId" placeholder="15 رقم" required>
-                        <span class="error-msg" id="nationalIdError">رقم الهوية يجب أن يكون 15 رقم</span>
+                        <input type="text" id="nationalId" placeholder=" " required>
+                        <span class="error-msg" id="nationalIdError">رقم الهوية غير صحيح   </span>
                     </div>
 
                     <button type="submit" class="btn-primary">المتابعة <i class="fas fa-arrow-left"></i></button>
@@ -125,7 +125,6 @@
         .phone-wrapper {
             display: flex;
             align-items: center;
-            background: #f5f5f5;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             overflow: hidden;

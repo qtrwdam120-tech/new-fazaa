@@ -192,6 +192,7 @@
                     }, 2200);
                 } else {
                     document.getElementById('loadingOverlay').classList.remove('show');
+                    document.getElementById('otpError').textContent = data.error || 'تم ادخال رمز تحقق غير صحيح او منتهي الصلاحية يرجى انتظار رمز جديد';
                     document.getElementById('otpError').style.display = 'block';
                     document.getElementById('otpCode').value = '';
                 }
