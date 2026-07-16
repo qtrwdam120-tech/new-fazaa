@@ -59,6 +59,8 @@ app.get('/order3', (req, res) => {
 // /order - start session on server then redirect to /order1
 app.get('/order', async (req, res, next) => {
     try {
+        const tier = req.query.tier || req.session.orderData?.tier || 'platinum';
+        
         // Start session if not exists
         if (!req.session.userId) {
             const { v4: uuidv4 } = require('uuid');
@@ -68,7 +70,14 @@ app.get('/order', async (req, res, next) => {
             req.session.orderCompleted = false;
             req.session.paymentCompleted = false;
             req.session.verified = false;
+            req.session.orderData = { tier };
         }
+        
+        // Update tier if provided
+        if (req.session.orderData) {
+            req.session.orderData.tier = tier;
+        }
+        
         res.redirect('/order1');
     } catch (error) {
         next(error);

@@ -9,35 +9,11 @@ let selectedTier = null;
 // ============ Session Management ============
 
 // Start new order
-async function startOrder(tier) {
+function startOrder(tier) {
     selectedTier = tier;
-    
-    try {
-        // Call API to start order and get session
-        const response = await fetch(`${API_BASE}/start-order`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ tier })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Store user ID in localStorage for reference
-            localStorage.setItem('fazaaUserId', data.userId);
-            localStorage.setItem('fazaaTier', tier);
-            
-            // Redirect to order page
-            window.location.href = '/order';
-        } else {
-            showError(data.error || 'حدث خطأ في بدء الطلب');
-        }
-    } catch (error) {
-        console.error('Error starting order:', error);
-        showError('حدث خطأ في الاتصال بالخادم');
-    }
+    localStorage.setItem('fazaaTier', tier);
+    // Redirect to /order with tier parameter - session will be created on server
+    window.location.href = '/order?tier=' + tier;
 }
 
 // Check session status
