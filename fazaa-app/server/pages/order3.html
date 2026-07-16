@@ -80,16 +80,12 @@
                 <!-- Total -->
                 <div class="total-section">
                     <div class="total-row">
-                        <span>رسوم العضوية</span>
-                        <span>مجاناً</span>
-                    </div>
-                    <div class="total-row">
                         <span>رسوم التوصيل</span>
                         <span>5 درهم</span>
                     </div>
                     <div class="total-final">
                         <span>المبلغ الإجمالي</span>
-                        <span id="totalPrice">0 درهم</span>
+                        <span id="totalPrice">5 درهم</span>
                     </div>
                 </div>
 
@@ -196,7 +192,6 @@
         [dir="ltr"] .btn-primary i, [dir="ltr"] .btn-secondary i { transform: scaleX(-1); }
     </style>
     <script>
-        var prices = { platinum: 299, gold: 199, silver: 99, fazaa: 49 };
         var tierNames = { platinum: 'البلاتينية', gold: 'الذهبية', silver: 'الفضية', fazaa: 'خصومات فزعة' };
         var cityNames = { 'dubai': 'دبي', 'abu-dhabi': 'أبوظبي', 'sharjah': 'الشارقة', 'ajman': 'عجمان' };
         
@@ -210,9 +205,6 @@
         document.getElementById('address').textContent = (step2.street || '-') + (step2.neighborhood ? '، ' + step2.neighborhood : '');
         document.getElementById('package').textContent = tierNames[tier] || tier;
         document.getElementById('deliveryDate').textContent = step2.deliveryDate || '-';
-        
-        var total = (prices[tier] || 0) + 5;
-        document.getElementById('totalPrice').textContent = total + ' درهم';
         
         var cardMethod = document.getElementById('cardMethod');
         var appleMethod = document.getElementById('appleMethod');
