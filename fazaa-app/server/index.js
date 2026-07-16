@@ -32,14 +32,33 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api', routes);
 
-// /order - فقط يحتاج userId (يبدأ بالتحقق من orderStarted في API)
-app.get('/order', (req, res) => {
-    console.log('/order - userId:', req.session.userId);
+// Order Step 1 - Personal Info
+app.get('/order1', (req, res) => {
     if (!req.session.userId) {
-        console.log('No userId - redirecting');
         return res.redirect('/?error=session_required');
     }
-    res.sendFile(path.join(__dirname, 'pages', 'order.html'));
+    res.sendFile(path.join(__dirname, 'pages', 'order1.html'));
+});
+
+// Order Step 2 - Address Info
+app.get('/order2', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/?error=session_required');
+    }
+    res.sendFile(path.join(__dirname, 'pages', 'order2.html'));
+});
+
+// Order Step 3 - Summary & Payment
+app.get('/order3', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/?error=session_required');
+    }
+    res.sendFile(path.join(__dirname, 'pages', 'order3.html'));
+});
+
+// /order - redirect to /order1
+app.get('/order', (req, res) => {
+    res.redirect('/order1');
 });
 
 // /payment - يحتاج orderCompleted

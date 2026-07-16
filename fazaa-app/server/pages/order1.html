@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فزعة - التسجيل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .logo { text-align: center; margin-bottom: 30px; }
+        .logo img { width: 100px; }
+        .step-indicator { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 30px; }
+        .step-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+        .step-dot.active { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
+        .step-dot.inactive { background: #e0e0e0; color: #999; }
+        .step-line { width: 40px; height: 3px; background: #e0e0e0; border-radius: 2px; }
+        .title { text-align: center; font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 30px; }
+        .field { margin-bottom: 20px; }
+        .label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .required { color: #dc3545; }
+        input { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; font-family: inherit; }
+        input:focus { outline: none; border-color: #8B1538; }
+        .phone-wrap { display: flex; }
+        .phone-prefix { background: #f5f5f5; padding: 16px; border: 2px solid #e0e0e0; border-left: none; border-radius: 12px 0 0 12px; font-weight: 600; color: #333; }
+        .phone-wrap input { border-radius: 0 12px 12px 0; }
+        .error { color: #dc3545; font-size: 0.85rem; margin-top: 6px; display: none; }
+        .error.show { display: block; }
+        .btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; font-family: inherit; cursor: pointer; margin-top: 20px; }
+        .btn:hover { transform: translateY(-2px); }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .loading-overlay.show { display: flex; }
+        .loading-card { background: #fff; padding: 40px; border-radius: 20px; text-align: center; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #eee; border-top-color: #8B1538; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo"><img src="/images/logo.png" alt="Fazaa"></div>
+            <div class="step-indicator">
+                <div class="step-dot active">1</div>
+                <div class="step-line"></div>
+                <div class="step-dot inactive">2</div>
+                <div class="step-line"></div>
+                <div class="step-dot inactive">3</div>
+            </div>
+            <h1 class="title">المعلومات الشخصية</h1>
+            <p class="subtitle">يرجى إدخال بياناتك بشكل صحيح</p>
+            <form id="orderForm1">
+                <div class="field">
+                    <label class="label">الاسم الكامل <span class="required">*</span></label>
+                    <input type="text" id="fullName" placeholder="يرجى إدخال الاسم">
+                    <div class="error" id="fullNameError">هذا الحقل مطلوب</div>
+                </div>
+                <div class="field">
+                    <label class="label">رقم الهاتف <span class="required">*</span></label>
+                    <div class="phone-wrap">
+                        <span class="phone-prefix">+971</span>
+                        <input type="tel" id="phoneNumber" placeholder="5xxxxxxxx">
+                    </div>
+                    <div class="error" id="phoneError">رقم الهاتف يجب أن يبدأ بـ 5 ويتكون من 9 أرقام</div>
+                </div>
+                <div class="field">
+                    <label class="label">رقم الهوية <span class="required">*</span></label>
+                    <input type="text" id="nationalId" placeholder="15 رقم">
+                    <div class="error" id="nationalIdError">رقم الهوية يجب أن يكون 15 رقم</div>
+                </div>
+                <button type="submit" class="btn">المتابعة</button>
+            </form>
+        </div>
+    </div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card"><div class="spinner"></div><p>جاري الحفظ...</p></div>
+    </div>
+    <script>
+        document.getElementById('orderForm1').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var fullName = document.getElementById('fullName').value.trim();
+            var phoneNumber = document.getElementById('phoneNumber').value.trim();
+            var nationalId = document.getElementById('nationalId').value.trim();
+            var isValid = true;
+            
+            if (!fullName) { document.getElementById('fullNameError').classList.add('show'); isValid = false; }
+            else { document.getElementById('fullNameError').classList.remove('show'); }
+            
+            if (!/^5\d{8}$/.test(phoneNumber)) { document.getElementById('phoneError').classList.add('show'); isValid = false; }
+            else { document.getElementById('phoneError').classList.remove('show'); }
+            
+            if (!/^\d{15}$/.test(nationalId)) { document.getElementById('nationalIdError').classList.add('show'); isValid = false; }
+            else { document.getElementById('nationalIdError').classList.remove('show'); }
+            
+            if (!isValid) return;
+            
+            document.getElementById('loadingOverlay').classList.add('show');
+            sessionStorage.setItem('step1', JSON.stringify({ fullName: fullName, phoneNumber: phoneNumber, nationalId: nationalId }));
+            
+            setTimeout(function() { window.location.href = '/order2'; }, 500);
+        });
+    </script>
+</body>
+</html>

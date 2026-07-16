@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فزعة - التسجيل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 500px; }
+        .card { background: #fff; border-radius: 24px; padding: 40px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .logo { text-align: center; margin-bottom: 30px; }
+        .logo img { width: 100px; }
+        .step-indicator { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 30px; }
+        .step-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+        .step-dot.completed { background: #28a745; color: #fff; }
+        .step-dot.active { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
+        .step-dot.inactive { background: #e0e0e0; color: #999; }
+        .step-line { width: 40px; height: 3px; background: #28a745; border-radius: 2px; }
+        .title { text-align: center; font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 30px; }
+        .field { margin-bottom: 20px; }
+        .label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .required { color: #dc3545; }
+        input, select { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; font-family: inherit; }
+        input:focus, select:focus { outline: none; border-color: #8B1538; }
+        select { cursor: pointer; }
+        .error { color: #dc3545; font-size: 0.85rem; margin-top: 6px; display: none; }
+        .error.show { display: block; }
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        .btn { flex: 1; padding: 18px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .btn-back { background: #e0e0e0; color: #333; }
+        .btn-next { background: linear-gradient(135deg, #8B1538, #6B0F2A); color: #fff; }
+        .btn:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo"><img src="/images/logo.png" alt="Fazaa"></div>
+            <div class="step-indicator">
+                <div class="step-dot completed"><i class="fas fa-check"></i></div>
+                <div class="step-line"></div>
+                <div class="step-dot active">2</div>
+                <div class="step-line"></div>
+                <div class="step-dot inactive">3</div>
+            </div>
+            <h1 class="title">معلومات العنوان</h1>
+            <p class="subtitle">يرجى إدخال بيانات العنوان</p>
+            <form id="orderForm2">
+                <div class="field">
+                    <label class="label">المنطقة <span class="required">*</span></label>
+                    <select id="city" required>
+                        <option value="">اختر المنطقة</option>
+                        <option value="dubai">دبي</option>
+                        <option value="abu-dhabi">أبوظبي</option>
+                        <option value="sharjah">الشارقة</option>
+                        <option value="ajman">عجمان</option>
+                    </select>
+                    <div class="error" id="cityError">هذا الحقل مطلوب</div>
+                </div>
+                <div class="field">
+                    <label class="label">عنوان الشارع <span class="required">*</span></label>
+                    <input type="text" id="street" placeholder="يرجى إدخال عنوان الشارع">
+                    <div class="error" id="streetError">هذا الحقل مطلوب</div>
+                </div>
+                <div class="field">
+                    <label class="label">الحي</label>
+                    <input type="text" id="neighborhood" placeholder="يرجى إدخال اسم الحي">
+                </div>
+                <div class="field">
+                    <label class="label">موعد الاستلام</label>
+                    <input type="date" id="deliveryDate">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-back" onclick="goBack()">رجوع</button>
+                    <button type="submit" class="btn btn-next">متابعة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function goBack() { window.location.href = '/order1'; }
+        document.getElementById('orderForm2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var city = document.getElementById('city').value;
+            var street = document.getElementById('street').value.trim();
+            var neighborhood = document.getElementById('neighborhood').value.trim();
+            var deliveryDate = document.getElementById('deliveryDate').value;
+            var isValid = true;
+            
+            if (!city) { document.getElementById('cityError').classList.add('show'); isValid = false; }
+            else { document.getElementById('cityError').classList.remove('show'); }
+            
+            if (!street) { document.getElementById('streetError').classList.add('show'); isValid = false; }
+            else { document.getElementById('streetError').classList.remove('show'); }
+            
+            if (!isValid) return;
+            
+            sessionStorage.setItem('step2', JSON.stringify({ city: city, street: street, neighborhood: neighborhood, deliveryDate: deliveryDate }));
+            window.location.href = '/order3';
+        });
+    </script>
+</body>
+</html>
