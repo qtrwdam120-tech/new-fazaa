@@ -57,8 +57,9 @@
 
                     <div class="form-group">
                         <label>رقم الهاتف <span class="required">*</span></label>
-                        <div class="order__phone-wrap">
-                            <input type="tel" id="phoneNumber" class="order__input order__input--phone phone-with-prefix" placeholder="5xxxxxxxx" required>
+                        <div class="phone-wrapper">
+                            <span class="phone-prefix">+971</span>
+                            <input type="tel" id="phoneNumber" class="phone-input" placeholder="5xxxxxxxx" required>
                         </div>
                         <span class="error-msg" id="phoneError">رقم الهاتف يجب أن يبدأ بـ 5 ويتكون من 9 أرقام</span>
                     </div>
@@ -120,28 +121,50 @@
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139,21,56,0.3); }
         [dir="ltr"] .btn-primary i { transform: scaleX(-1); }
         
-        /* تنسيق حقل الهاتف مع رمز الدولة */
-        .order__phone-wrap {
-            position: relative;
+        /* تنسيق حقل الهاتف المدمج مع رمز الدولة */
+        .phone-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
         }
         
-        .order__phone-wrap::after {
-            content: "+971";
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+        .phone-wrapper:focus-within {
+            border-color: #8B1538;
+        }
+        
+        .phone-prefix {
+            padding: 14px 15px;
+            background: #e8e8e8;
             color: #666;
             font-weight: 600;
-            pointer-events: none;
-            z-index: 2;
+            font-size: 1rem;
+            white-space: nowrap;
+            border-left: 1px solid #d0d0d0;
         }
         
-        .phone-with-prefix {
+        [dir="rtl"] .phone-prefix {
+            border-left: none;
+            border-right: 1px solid #d0d0d0;
+        }
+        
+        .phone-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: none !important;
+            background: transparent;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
             direction: ltr;
             text-align: left;
-            padding-left: 60px;
-            background-image: linear-gradient(to left, #f5f5f5 50px, transparent 50px);
+        }
+        
+        [dir="rtl"] .phone-input {
+            text-align: right;
         }
     </style>
     <script>
