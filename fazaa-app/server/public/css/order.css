@@ -207,7 +207,6 @@ a {
 
 
 
-.order__phone-wrap .order__input--phone {
     border-radius: 0 12px 12px 0;
     border-left: none;
 }
@@ -584,7 +583,6 @@ a {
 
 
 
-.order__phone-wrap::after {
     content: "+971" !important;
     position: absolute !important;
     left: 15px !important;          
